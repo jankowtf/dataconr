@@ -1,10 +1,11 @@
 Package: datar
 Type: Package
 Title: Data connectors for R
-Version: 0.1
+Version: 0.2
 Date: 2015-10-13
 Authors@R: person("Janko", "Thyson", email = "janko.thyson@rappster.de", role = c("aut", "cre"))
 Description: Provides functionality to connect to a variety of data sources
 License: GPL-3
 LazyData: TRUE
 Imports: R6
+Suggests: testthat, RNeo4j
