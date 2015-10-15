@@ -1,4 +1,4 @@
-graph <- startGraph("http://localhost:7474/db/data")
+library(RNeo4j)
 
 if (FALSE) {
 
@@ -137,6 +137,7 @@ context("mapDatasourceToList.graph (RNeo4j)")
 test_that("mapDatasourceToList.graph::tweets", {
   skip("Not refactored yet")
 
+  graph <- startGraph("http://localhost:7474/db/data")
   importSample(graph, "tweets", input = FALSE)
 
   expect_is(res <- mapDatasourceToList(con = graph), "list")

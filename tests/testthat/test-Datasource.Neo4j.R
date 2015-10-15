@@ -1,5 +1,4 @@
 library(RNeo4j)
-graph <- startGraph("http://localhost:7474/db/data/")
 
 context("Datasource.Neo4j")
 
@@ -8,6 +7,8 @@ test_that("Datasource.Neo4j::plain", {
 })
 
 test_that("Datasource.Neo4j::initialize", {
+  skip("Manual only")
+  graph <- startGraph("http://localhost:7474/db/data/")
   expect_is(Datasource.Neo4j$new(con = graph), "Datasource.Neo4j")
 })
 
