@@ -24,7 +24,7 @@
 #'  }
 #' }
 #'
-#' @template author
+#' @template authors
 #' @template references
 #' @example inst/examples/Datasource.Neo4j.R
 #'

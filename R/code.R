@@ -28,7 +28,7 @@ createListIndex <- function(x, sep = c("[['", "']][['", "']]")) {
 #'  \code{FALSE}: do not include files. See examples.
 #' @return \code{\link[base]{list}}.
 #' @example inst/examples/mapDirectory.R
-#' @template author
+#' @template authors
 #' @template references
 #' @export
 mapDirectory <- function(
@@ -104,7 +104,7 @@ mapDatasourceToList <- function(con) {
 #'  Neo4j graph.
 #' @return \code{\link[base]{list}}.
 #' @example inst/examples/mapDatasourceToList.graph.R
-#' @template author
+#' @template authors
 #' @template references
 #' @export
 mapDatasourceToList.graph <- function(
@@ -205,7 +205,7 @@ mapDatasourceToList.graph <- function(
 #'  Neo4j graph wrapped by connector class.
 #' @return \code{\link[base]{list}}.
 #' @example inst/examples/mapDatasourceToList.Datasource.Neo4j.R
-#' @template author
+#' @template authors
 #' @template references
 #' @export
 mapDatasourceToList.Datasource.Neo4j <- function(

@@ -20,3 +20,4 @@ vignettes/*.pdf
 
 # Temporary data for unit testing
 /tests/testthat/data/ignore/*
+.Rproj.user
