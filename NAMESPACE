@@ -2,7 +2,10 @@
 
 S3method(mapDatasourceToList,Datasource.Neo4j)
 S3method(mapDatasourceToList,graph)
+export(Datasource)
 export(Datasource.Neo4j)
+export(IDatasource)
 export(createListIndex)
+export(makeNeo4jProof)
 export(mapDirectory)
 import(R6)

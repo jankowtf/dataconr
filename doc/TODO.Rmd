@@ -16,3 +16,5 @@ importSample(graph, "movies")
 summary(graph)
 ```
 
+- `isServerRunning()`: does this already exist/how would I query something like this?
+

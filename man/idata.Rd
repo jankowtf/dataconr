@@ -36,7 +36,7 @@ TODO
 \section{Disclaimer}{
 
 \strong{This package is work-in-progress and is thus likely to change quite
-substantially until it reaches a more mature state}
+substantially until it reaches a more mature state.}
 }
 
 \section{Aknowledgements}{

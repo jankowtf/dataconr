@@ -9,10 +9,8 @@ test_that("Datasource.Neo4j::plain", {
 test_that("Datasource.Neo4j::initialize", {
   skip("Manual only")
   graph <- startGraph("http://localhost:7474/db/data/")
-  expect_is(Datasource.Neo4j$new(con = graph), "Datasource.Neo4j")
+  # clear(graph, input = FALSE)
+  # importSample(graph, "movies", input = FALSE)
+  expect_is(res <- Datasource.Neo4j$new(con = graph), "Datasource.Neo4j")
+  expect_true(inherits(res$con, "graph"))
 })
-
-# test_that("Datasource.Neo4j::plain", {
-#   importSample(graph, "movies", input = FALSE)
-#   expect_is(Datasource.Neo4j$new(con = graph), "Datasource.Neo4j")
-# })
