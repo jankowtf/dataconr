@@ -1,3 +1,53 @@
+
+# IDatasource ---------------------------------------------------------------
+
+#' @title
+#' General interface class that other interfaces inherit from/implement
+#'
+#' @description
+#' This is the class that defines the overall interfaces that is inherited
+#' from/implemented by other interfaces.
+#'
+#' @details
+#' The terms \emph{interace} is used in a more loose context than in more
+#' rigid OOP contexts such as \emph{C#} or the like
+#'
+#' @field con \code{\link{ANY}}
+#'  Connection to a data source
+#'
+#' @section Methods:
+#'
+#' \itemize{
+#'  \item{initialize} {
+#'
+#'    \itemize{
+#'      \item{con }{\code{\link{ANY}}}
+#'    }
+#'  }
+#' }
+#'
+#' @template authors
+#' @template references
+#' @example inst/examples/IDatasource.R
+#'
+#' @import R6
+#' @export
+IDatasource <- R6Class(
+  classname = "IDatasource",
+  portable = TRUE,
+  public = list(
+    ## Fields //
+    con = NULL,
+
+    ## Methods //
+    initialize = function(
+      con = NULL
+    ) {
+      self$con <- con
+    }
+  )
+)
+
 # Datasource.Neo4j ------------------------------------------------------------
 
 #' @title
