@@ -1,0 +1,18 @@
+---
+title: "TODO"
+author: "Janko Thyson"
+date: "13. Oktober 2015"
+output: html_document
+---
+
+# RNeo4j
+
+- Ask Nicole to optionally suppress message for `summary(graph)`
+
+```{r}
+library(RNeo4j)
+graph <- startGraph("http://localhost:7474/db/data")
+importSample(graph, "movies")
+summary(graph)
+```
+

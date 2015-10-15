@@ -66,6 +66,6 @@ mapDirectory(dir = tmp, include_root = FALSE, relative = TRUE)
 Janko Thyson \email{janko.thyson@rappster.de}
 }
 \references{
-\url{http://github.com/rappster/shinyref}
+\url{http://github.com/rappster/datar}
 }
 

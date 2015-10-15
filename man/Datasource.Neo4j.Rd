@@ -4,7 +4,7 @@
 \name{Datasource.Neo4j}
 \alias{Datasource.Neo4j}
 \title{Connector for Neo4j}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000acec518> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000acfd388> 
  - attr(*, "name")= chr "Datasource.Neo4j_generator"
 }}
 \usage{
@@ -36,13 +36,13 @@ TODO
 }
 }
 \examples{
-
+## TODO
 }
 \author{
 Janko Thyson \email{janko.thyson@rappster.de}
 }
 \references{
-\url{http://github.com/rappster/shinyref}
+\url{http://github.com/rappster/datar}
 }
 \keyword{datasets}
 

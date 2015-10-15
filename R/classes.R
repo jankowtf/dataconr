@@ -35,12 +35,15 @@ Datasource.Neo4j <- R6Class(
   portable = TRUE,
   public = list(
     ## Fields //
-
+    con = NULL,
 
     ## Methods //
     initialize = function(
-
+      con = NULL
     ) {
+      self$con <- con
+    },
+    mapToList = function() {
 
     }
   )
