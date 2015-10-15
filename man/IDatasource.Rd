@@ -4,7 +4,7 @@
 \name{IDatasource}
 \alias{IDatasource}
 \title{General interface class that other interfaces inherit from/implement}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000b102600> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000b1077c8> 
  - attr(*, "name")= chr "IDatasource_generator"
 }}
 \usage{

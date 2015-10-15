@@ -4,7 +4,7 @@
 \name{Datasource}
 \alias{Datasource}
 \title{Generic class that specific classes for data sources inherit from}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000b0d86b0> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000b0de298> 
  - attr(*, "name")= chr "Datasource_generator"
 }}
 \usage{
