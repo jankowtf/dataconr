@@ -654,3 +654,13 @@ Storage files: (filename : modification date - size)
 2015-10-13 21:05:50.673+0000 INFO  [o.n.k.i.a.KernelSchemaStateStore]: Schema state store has been cleared.
 2015-10-13 21:05:57.333+0000 INFO  [o.n.k.i.a.i.s.OnlineIndexSamplingJob]: Sampled index :Person(name) with 131 unique values in sample of avg size 131 taken from index containing 131 entries
 2015-10-13 21:06:07.332+0000 INFO  [o.n.k.i.a.i.s.OnlineIndexSamplingJob]: Sampled index :Movie(title) with 38 unique values in sample of avg size 38 taken from index containing 38 entries
+2015-10-13 21:47:37.515+0000 INFO  [o.n.s.CommunityNeoServer]: Successfully shutdown Neo4j Server.
+2015-10-13 21:47:37.515+0000 INFO  [o.n.k.EmbeddedGraphDatabase]: Shutdown started
+2015-10-13 21:47:37.515+0000 INFO  [o.n.k.EmbeddedGraphDatabase]: Database is now unavailable
+2015-10-13 21:47:38.014+0000 INFO  [o.n.k.i.s.StoreFactory]: About to rotate counts store at transaction 39 to [C:\Users\Thyson\Documents\git\public\r\packages\datar\tests\testthat\data\db\neo4j_1\neostore.counts.db.b], from [C:\Users\Thyson\Documents\git\public\r\packages\datar\tests\testthat\data\db\neo4j_1\neostore.counts.db.a].
+2015-10-13 21:47:38.017+0000 INFO  [o.n.k.i.s.StoreFactory]: Successfully rotated counts store at transaction 39 to [C:\Users\Thyson\Documents\git\public\r\packages\datar\tests\testthat\data\db\neo4j_1\neostore.counts.db.b], from [C:\Users\Thyson\Documents\git\public\r\packages\datar\tests\testthat\data\db\neo4j_1\neostore.counts.db.a].
+2015-10-13 21:47:40.351+0000 INFO  [o.n.k.NeoStoreDataSource]: NeoStore closed
+2015-10-13 21:47:40.352+0000 INFO  [o.n.k.i.DiagnosticsManager]: --- STOPPING diagnostics START ---
+2015-10-13 21:47:40.352+0000 INFO  [o.n.k.i.DiagnosticsManager]: --- STOPPING diagnostics END ---
+2015-10-13 21:47:40.354+0000 INFO  [o.n.s.d.LifecycleManagingDatabase]: Successfully stopped database
+2015-10-13 21:47:40.354+0000 INFO  [o.n.s.CommunityNeoServer]: Successfully shutdown database.
