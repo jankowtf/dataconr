@@ -4,7 +4,7 @@
 \name{Datasource.Neo4j}
 \alias{Datasource.Neo4j}
 \title{Connector for Neo4j}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000b0d9078> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000b0c6db0> 
  - attr(*, "name")= chr "Datasource.Neo4j_generator"
 }}
 \usage{
@@ -27,11 +27,8 @@ TODO
 
 
 \itemize{
- \item{initialize} {
-
-   \itemize{
-     \item{path }{\code{\link{character}}}
-   }
+ \item{See superclass} {
+   \code{\link[idata]{IDatasource}}
  }
 }
 }

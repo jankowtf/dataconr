@@ -4,7 +4,7 @@
 \name{Datasource}
 \alias{Datasource}
 \title{Generic class that specific classes for data sources inherit from}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000b0eab38> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000b0d86b0> 
  - attr(*, "name")= chr "Datasource_generator"
 }}
 \usage{
@@ -26,6 +26,9 @@ TODO
 
 
 \itemize{
+ \item{See superclass} {
+   \code{\link[idata]{IDatasource}}
+ }
  \item{initialize} {
 
    \itemize{

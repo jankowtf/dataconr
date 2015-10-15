@@ -24,6 +24,18 @@
 #'      \item{con }{\code{\link{ANY}}}
 #'    }
 #'  }
+#'  \item{asExpectedInDatasource} {
+#'
+#'    \itemize{
+#'      \item{input }{\code{\link{ANY}}}
+#'    }
+#'  }
+#'  \item{asExpectedInR} {
+#'
+#'    \itemize{
+#'      \item{input }{\code{\link{ANY}}}
+#'    }
+#'  }
 #' }
 #'
 #' @template authors
@@ -44,6 +56,16 @@ IDatasource <- R6Class(
       con = NULL
     ) {
       self$con <- con
+    },
+    asExpectedInDatasource = function(
+      input
+    ) {
+
+    },
+    asExpectedInR = function(
+      input
+    ) {
+
     }
   )
 )
@@ -65,6 +87,9 @@ IDatasource <- R6Class(
 #' @section Methods:
 #'
 #' \itemize{
+#'  \item{See superclass} {
+#'    \code{\link[idata]{IDatasource}}
+#'  }
 #'  \item{initialize} {
 #'
 #'    \itemize{
@@ -97,6 +122,16 @@ Datasource <- R6Class(
       super$initialize(...)
       # print(self)
       self$hello_world <- hello_world
+    },
+    asExpectedInDatasource = function(
+      input
+    ) {
+
+    },
+    asExpectedInR = function(
+      input
+    ) {
+
     }
   )
 )
@@ -119,11 +154,8 @@ Datasource <- R6Class(
 #' @section Methods:
 #'
 #' \itemize{
-#'  \item{initialize} {
-#'
-#'    \itemize{
-#'      \item{path }{\code{\link{character}}}
-#'    }
+#'  \item{See superclass} {
+#'    \code{\link[idata]{IDatasource}}
 #'  }
 #' }
 #'
@@ -147,6 +179,56 @@ Datasource.Neo4j <- R6Class(
     ) {
       # self$con <- con
       super$initialize(...)
+    },
+    asExpectedInDatasource = function(
+      input
+    ) {
+      ## TODO 2015-1015: implement mechanism for rule sets
+      rules <- list()
+      rules$classes_invalid <- c(
+        "POSIXlt",
+        "POSIXct"
+      )
+
+      input_2 <- input
+      classes <- lapply(input_2, class)
+
+      # col=1
+      for (col in 1:length(classes)) {
+        if (any(classes[[col]] %in% rules$classes_invalid)) {
+          colname <- names(classes)[col]
+          input_2[[colname]] <- as.character(input_2[[colname]])
+        }
+      }
+      input_2
+    },
+    asExpectedInR = function(
+      input
+    ) {
+      ## TODO 2015-1015: implement mechanism for rule sets
+      rules <- list()
+      rules$rapid <- list(
+        function(input, name) {
+          if (grepl("^date*", name)) {
+            input[[name]] <- as.POSIXlt(input[[name]])
+          }
+          input
+        }
+      )
+
+      input_2 <- input
+      columns <- names(input)
+
+      rules_this <- rules$rapid
+      # col=columns[1]
+      # rule=rules_this[[1]]
+
+      for (col in columns) {
+        for (rule in rules_this) {
+          input_2 <- rule(input = input_2, name = col)
+        }
+      }
+      input_2
     }
   )
 )

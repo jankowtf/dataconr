@@ -4,7 +4,7 @@
 \name{IDatasource}
 \alias{IDatasource}
 \title{General interface class that other interfaces inherit from/implement}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000b114260> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000b102600> 
  - attr(*, "name")= chr "IDatasource_generator"
 }}
 \usage{
@@ -32,6 +32,18 @@ rigid OOP contexts such as \emph{C#} or the like
 
    \itemize{
      \item{con }{\code{\link{ANY}}}
+   }
+ }
+ \item{asExpectedInDatasource} {
+
+   \itemize{
+     \item{input }{\code{\link{ANY}}}
+   }
+ }
+ \item{asExpectedInR} {
+
+   \itemize{
+     \item{input }{\code{\link{ANY}}}
    }
  }
 }
