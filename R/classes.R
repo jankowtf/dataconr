@@ -48,6 +48,59 @@ IDatasource <- R6Class(
   )
 )
 
+# Datasource ---------------------------------------------------------------
+
+#' @title
+#' Generic class that specific classes for data sources inherit from
+#'
+#' @description
+#' TODO
+#'
+#' @details
+#' TODO
+#'
+#' @field con \code{\link{ANY}}
+#'  Connection to a data source
+#'
+#' @section Methods:
+#'
+#' \itemize{
+#'  \item{initialize} {
+#'
+#'    \itemize{
+#'      \item{con }{\code{\link{ANY}}}
+#'    }
+#'  }
+#' }
+#'
+#' @template authors
+#' @template references
+#' @example inst/examples/Datasource.R
+#'
+#' @import R6
+#' @export
+Datasource <- R6Class(
+  classname = "Datasource",
+  inherit = IDatasource,
+  portable = TRUE,
+  public = list(
+    ## Fields //
+    con = NULL,
+    hello_world = NULL,
+
+    ## Methods //
+    initialize = function(
+      ...,
+      hello_world = NULL
+    ) {
+      # self$con <- con
+      super$initialize(...)
+      # print(self)
+      self$hello_world <- hello_world
+    }
+  )
+)
+
 # Datasource.Neo4j ------------------------------------------------------------
 
 #' @title
