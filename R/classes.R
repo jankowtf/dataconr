@@ -107,14 +107,14 @@ Datasource <- R6Class(
 #' Connector for Neo4j
 #'
 #' @description
-#' Main class to handle communication with Neo4j
+#' This class wraps objects for connecting to Neo4j and provides
+#' respective methods.
 #'
 #' @details
 #' TODO
 #'
-#' @field cache \code{\link{character}}
-#'  File path to cached R object.
-#'  Takes precedence over other meta information if specified
+#' @field con \code{\link{graph}}
+#'  Connection object
 #'
 #' @section Methods:
 #'
@@ -135,19 +135,18 @@ Datasource <- R6Class(
 #' @export
 Datasource.Neo4j <- R6Class(
   classname = "Datasource.Neo4j",
+  inherit = Datasource,
   portable = TRUE,
   public = list(
     ## Fields //
-    con = NULL,
+    con = "graph",
 
     ## Methods //
     initialize = function(
-      con = NULL
+      ...
     ) {
-      self$con <- con
-    },
-    mapToList = function() {
-
+      # self$con <- con
+      super$initialize(...)
     }
   )
 )
