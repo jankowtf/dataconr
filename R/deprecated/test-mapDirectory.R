@@ -22,7 +22,6 @@ test_that2("mapDirectory::include_root", {
   expect_true(names(res) != "data")
 })
 
-
 # mapDirectory_2 ----------------------------------------------------------
 
 context("mapDirectory_2")

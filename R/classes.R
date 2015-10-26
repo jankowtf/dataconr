@@ -64,7 +64,7 @@ IDataCon <- R6Class(
 # DataCon ---------------------------------------------------------------
 
 #' @title
-#' Generic class for inheritance for connectors data location
+#' Generic class for inheritance for data connections
 #'
 #' @description
 #' TODO
@@ -263,7 +263,12 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
       extended = FALSE,
       with_ids = FALSE
     ) {
-      toRFormat(con = self)
+      toRFormat(con = self,
+        data_col = date_col,
+        date_format = date_format,
+        extended = extended,
+        with_ids = with_ids
+      )
     },
     pull = function(
       format = TRUE,
@@ -351,54 +356,14 @@ DataCon.Neo4j <- R6Class(
       super$initialize(...)
     },
     toExternalFormat = function(
-      data
+      con
     ) {
-      ## TODO 2015-1015: implement mechanism for rule sets
-      rules <- list()
-      rules$classes_invalid <- c(
-        "POSIXlt",
-        "POSIXct"
-      )
-
-      data_2 <- data
-      classes <- lapply(data_2, class)
-
-      # col=1
-      for (col in 1:length(classes)) {
-        if (any(classes[[col]] %in% rules$classes_invalid)) {
-          colname <- names(classes)[col]
-          data_2[[colname]] <- as.character(data_2[[colname]])
-        }
-      }
-      data_2
+      toExternalFormat(con = self)
     },
     toRFormat = function(
-      data
+      con
     ) {
-      ## TODO 2015-1015: implement mechanism for rule sets
-      rules <- list()
-      rules$rapid <- list(
-        function(data, name) {
-          if (grepl("^date*", name)) {
-            data[[name]] <- as.POSIXlt(data[[name]])
-          }
-          data
-        }
-      )
-
-      data_2 <- data
-      columns <- names(data)
-
-      rules_this <- rules$rapid
-      # col=columns[1]
-      # rule=rules_this[[1]]
-
-      for (col in columns) {
-        for (rule in rules_this) {
-          data_2 <- rule(data = data_2, name = col)
-        }
-      }
-      data_2
+      toRFormat(con = self)
     },
     pull = function(...) {
       stop("DataCon.Neo4j: pull: not implemented yet ")

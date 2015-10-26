@@ -2,7 +2,7 @@ library(RNeo4j)
 
 context("DataCon.Neo4j")
 
-test_that("DataCon.Neo4j::plain", {
+test_that("DataCon.Neo4j: plain", {
   expect_is(DataCon.Neo4j$new(), "DataCon.Neo4j")
 })
 
@@ -18,26 +18,26 @@ test_that("DataCon.Neo4j::initialize", {
 
 # toExternalFormat --------------------------------------------------
 
-test_that("DataCon.Neo4j::toExternalFormat", {
+test_that("DataCon.Neo4j: toExternalFormat", {
   inst <- DataCon.Neo4j$new()
   data <- data.frame(
     date = seq(as.POSIXlt("2015-01-01"), length.out = 3, by = "1 days"),
     value = 1:3
   )
-  expect_is(res <- inst$toExternalFormat(data = data), class(data))
+  inst$setCached(data)
+  expect_is(res <- inst$toExternalFormat(), class(data))
   expect_is(res$date, "character")
 })
 
-
 # toRFormat -----------------------------------------------------------
 
-test_that("DataCon.Neo4j::toRFormat", {
+test_that("DataCon.Neo4j: toRFormat", {
   inst <- DataCon.Neo4j$new()
   data <- data.frame(
     date = as.character(seq(as.POSIXlt("2015-01-01"), length.out = 3, by = "1 days")),
     value = 1:3
   )
-  self=inst
-  expect_is(res <- inst$toRFormat(data = data), class(data))
+  inst$setCached(data)
+  expect_is(res <- inst$toRFormat(), class(data))
   expect_is(res$date, "POSIXlt")
 })
