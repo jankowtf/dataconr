@@ -125,3 +125,18 @@ test_that("DataCon.IntelligentForecaster.Csv: cached_active: set", {
   expect_true(nrow(res) > 0)
   expect_identical(res, target)
 })
+
+
+# Pull extended -----------------------------------------------------------
+
+test_that("DataCon.IntelligentForecaster.Csv: pull: extended", {
+  inst <- DataCon.IntelligentForecaster.Csv$new()
+  path <- withCorrectWorkingDir(
+    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv/csv_1.csv")
+  )
+  expect_true(file.exists(path))
+  inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
+  expect_is(res <- inst$pull(extended = TRUE, with_ids = TRUE), "data.frame")
+  expect_true(nrow(res) > 0)
+  expect_true(nrow(inst$cached) > 0)
+})
