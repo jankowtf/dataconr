@@ -107,13 +107,16 @@ DataCon <- R6Class(
     ## Fields //
     con = NULL,
     cached = NULL,
+    meta = list(),
 
     ## Methods //
     initialize = function(
       ...,
-      con = NULL
+      con = NULL,
+      meta = list()
     ) {
       self$con <- con
+      self$meta <- meta
     },
     getCached = function() {
       self$cached
@@ -187,6 +190,7 @@ DataCon.IntelligentForecaster <- R6Class(
     ## Fields //
     con = character(),
     cached = data.frame(),
+    meta = list(),
 
     ## Methods //
     initialize = function(
@@ -244,6 +248,7 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
     ## Fields //
     con = character(),
     cached = data.frame(),
+    meta = list(),
 
     ## Methods //
     initialize = function(

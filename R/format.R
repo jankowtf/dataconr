@@ -110,6 +110,10 @@ toRFormat.DataCon.IntelligentForecaster.Csv <- function(
 
   ## Ensuring correct decimal separator //
   data$value <- as.numeric(gsub(",", ".", data$value))
+
+  ## Saving meta information //
+  con$meta$column_order <- names(data)
+
   data
 }
 
@@ -156,6 +160,12 @@ toRFormat.DataCon.Neo4j <- function(
       data_2 <- rule(data = data_2, name = col)
     }
   }
+
+  ## Meta information //
+  if (length(idx <- con$meta$column_order)) {
+    data_2 <- data_2[ , idx]
+  }
+
   data_2
 }
 

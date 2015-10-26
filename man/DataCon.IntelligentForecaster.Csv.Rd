@@ -4,7 +4,7 @@
 \name{DataCon.IntelligentForecaster.Csv}
 \alias{DataCon.IntelligentForecaster.Csv}
 \title{Connector for Intelligent Forecaster CSV format}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000ac969c8> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000ac98d28> 
  - attr(*, "name")= chr "DataCon.IntelligentForecaster.Csv_generator"
 }}
 \usage{

@@ -15,7 +15,6 @@ test_that("DataCon.Neo4j::initialize", {
   expect_true(inherits(res$con, "graph"))
 })
 
-
 # toExternalFormat --------------------------------------------------
 
 test_that("DataCon.Neo4j: toExternalFormat", {
@@ -40,4 +39,23 @@ test_that("DataCon.Neo4j: toRFormat", {
   inst$setCached(data)
   expect_is(res <- inst$toRFormat(), class(data))
   expect_is(res$date, "POSIXlt")
+})
+
+# IntelligentForecaster and Neo4j -----------------------------------------
+
+test_that("DataCon.IntelligentForecaster.Csv + DataCon.Neo4j: meta: column order", {
+  path <- withCorrectWorkingDir(
+    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv/csv_1.csv")
+  )
+  expect_true(file.exists(path))
+  inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
+  data <- inst$pull(extended = TRUE, with_ids = TRUE)
+  # inst$meta
+
+  inst_2 <- DataCon.Neo4j$new(meta = inst$meta)
+  # inst_2$meta
+  inst_2$setCached(data)
+
+  expect_is(res <- inst$toRFormat(), class(inst$getCached()))
+  expect_identical(order(names(inst$getCached())), order(names(res)))
 })
