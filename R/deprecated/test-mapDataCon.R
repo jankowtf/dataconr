@@ -130,17 +130,17 @@ if (FALSE) {
   createDb(list(company_id = "company_2", ts_id = "b"))
 }
 
-# mapDatasourceToList_1 ----------------------------------------------------------
+# mapDataConToList_1 ----------------------------------------------------------
 
-context("mapDatasourceToList.graph (RNeo4j)")
+context("mapDataConToList.graph (RNeo4j)")
 
-test_that("mapDatasourceToList.graph::tweets", {
+test_that("mapDataConToList.graph::tweets", {
   skip("Not refactored yet")
 
   graph <- startGraph("http://localhost:7474/db/data")
   importSample(graph, "tweets", input = FALSE)
 
-  expect_is(res <- mapDatasourceToList(con = graph), "list")
+  expect_is(res <- mapDataConToList(con = graph), "list")
   expect_true(length(res) > 0)
   expect_identical(names(res), c("ns_1", "company_1", "company_2"))
 })

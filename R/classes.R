@@ -1,79 +1,70 @@
 
-# IDatasource ---------------------------------------------------------------
+# IDataCon ---------------------------------------------------------------
 
 #' @title
-#' General interface class that other interfaces inherit from/implement
+#' Class that functions as an interface for data connections
 #'
 #' @description
-#' This is the class that defines the overall interfaces that is inherited
-#' from/implemented by other interfaces.
+#' Defines the interface for data connections.
 #'
 #' @details
-#' The terms \emph{interace} is used in a more loose context than in more
+#' The terms \emph{interace} is used in a looser context than in more
 #' rigid OOP contexts such as \emph{C#} or the like
 #'
-#' @field con \code{\link{ANY}}
-#'  Connection to a data source
+#' @section Getters/setters:
 #'
-#' @section Methods:
+#' \itemize{
+#'  \item{getCached} {
+#'  }
+#'  \item{getCachedActive} {
+#'  }
+#'  \item{setCached} {
+#'  }
+#'  \item{setCachedActive} {
+#'  }
+#' }
+#'
+#' @section Public methods:
 #'
 #' \itemize{
 #'  \item{initialize} {
-#'
-#'    \itemize{
-#'      \item{con }{\code{\link{ANY}}}
-#'    }
 #'  }
-#'  \item{asExpectedInDatasource} {
-#'
-#'    \itemize{
-#'      \item{input }{\code{\link{ANY}}}
-#'    }
+#'  \item{toExternalFormat} {
 #'  }
-#'  \item{asExpectedInR} {
-#'
-#'    \itemize{
-#'      \item{input }{\code{\link{ANY}}}
-#'    }
+#'  \item{toRFormat} {
+#'  }
+#'  \item{pull} {
+#'  }
+#'  \item{push} {
 #'  }
 #' }
 #'
 #' @template authors
 #' @template references
-#' @example inst/examples/IDatasource.R
+#' @example inst/examples/IDataCon.R
 #'
 #' @import R6
 #' @export
-IDatasource <- R6Class(
-  classname = "IDatasource",
+IDataCon <- R6Class(
+  classname = "IDataCon",
   portable = TRUE,
   public = list(
-    ## Fields //
-    con = NULL,
-
     ## Methods //
-    initialize = function(
-      con = NULL
-    ) {
-      self$con <- con
-    },
-    asExpectedInDatasource = function(
-      input
-    ) {
-
-    },
-    asExpectedInR = function(
-      input
-    ) {
-
-    }
+    getCached = function(...) {},
+    getCachedActive = function(...) {},
+    setCached = function(...) {},
+    setCachedActive = function(...) {},
+    toExternalFormat = function(...) {},
+    toRFormat = function(...) {},
+    pull = function(...) {},
+    push = function(...) {}
   )
 )
 
-# Datasource ---------------------------------------------------------------
+# DataCon ---------------------------------------------------------------
 
 #' @title
-#' Generic class that specific classes for data sources inherit from
+#' Generic class for inheritance for connectors data location
 #'
 #' @description
 #' TODO
@@ -83,60 +74,237 @@ IDatasource <- R6Class(
 #'
 #' @field con \code{\link{ANY}}
 #'  Connection to a data source
+#' @field cached \code{\link{ANY}}
+#'  Cached data state
+#'
+#' @section Getters/setters:
+#'
+#' \itemize{
+#'  \item{See superclass} {
+#'    \code{\link[idata]{IDataCon}}
+#'  }
+#' }
+#'
+#' @section Public methods:
+#'
+#' \itemize{
+#'  \item{See interface} {
+#'    \code{\link[idata]{IDataCon}}
+#'  }
+#' }
+#'
+#' @template authors
+#' @template references
+#' @example inst/examples/DataCon.R
+#'
+#' @import R6
+#' @export
+DataCon <- R6Class(
+  classname = "DataCon",
+  inherit = IDataCon,
+  portable = TRUE,
+  public = list(
+    ## Fields //
+    con = NULL,
+    cached = NULL,
+
+    ## Methods //
+    initialize = function(
+      ...,
+      con = NULL
+    ) {
+      self$con <- con
+    },
+    getCached = function() {
+      self$cached
+    },
+    getCachedActive = function() {
+      self$cached_active
+    },
+    setCached = function(value) {
+      self$cached <- value
+    },
+    setCachedActive = function(value) {
+      self$cached_active <- value
+    },
+    toExternalFormat = function() {
+      stop("DataCon: toExternalFormat: not implemented")
+    },
+    toRFormat = function(...) {
+      stop("DataCon: toRFormat: not implemented")
+    },
+    pull = function(...) {
+      stop("DataCon: pull: not implemented")
+    },
+    push = function(...) {
+      stop("DataCon: push: not implemented")
+    }
+  )
+)
+
+# DataCon.IntelligentForecaster ----------------------------------------
+
+#' @title
+#' Connector for Intelligent Forecaster
+#'
+#' @description
+#' This class wraps objects for connecting to Intelligent Forecaster and
+#' provides respective methods.
+#'
+#' @details
+#' TODO
+#'
+#' @field con \code{\link{character}}
+#'  File path
+#'
+#' @section Getters/setters:
+#'
+#' \itemize{
+#'  \item{See superclass} {
+#'    \code{\link[idata]{DataCon}}
+#'  }
+#' }
+#'
+#' @section Public methods:
+#'
+#' \itemize{
+#'  \item{See superclass} {
+#'    \code{\link[idata]{DataCon}}
+#'  }
+#' }
+#'
+#' @template authors
+#' @template references
+#' @example inst/examples/DataCon.IntelligentForecaster.R
+#'
+#' @import R6
+#' @export
+DataCon.IntelligentForecaster <- R6Class(
+  classname = "DataCon.IntelligentForecaster",
+  inherit = DataCon,
+  portable = TRUE,
+  public = list(
+    ## Fields //
+    con = character(),
+    cached = data.frame(),
+
+    ## Methods //
+    initialize = function(
+      ...
+    ) {
+      super$initialize(...)
+    }
+  )
+)
+
+# DataCon.IntelligentForecaster.Csv -------------------------------------
+
+#' @title
+#' Connector for Intelligent Forecaster CSV format
+#'
+#' @description
+#' This class wraps objects for connecting to data stored by
+#' Intelligent Forecaster in a CSV format and provides respective methods.
+#'
+#' @details
+#' TODO
+#'
+#' @field con \code{\link[base]{character}}
+#'  File path
+#' @field cached \code{\link[base]{data.frame}}
+#'  Cached data state as data frame
+#'
+#' @section Getters/setters:
+#'
+#' \itemize{
+#'  \item{See superclass} {
+#'    \code{\link[idata]{DataCon}}
+#'  }
+#' }
 #'
 #' @section Methods:
 #'
 #' \itemize{
 #'  \item{See superclass} {
-#'    \code{\link[idata]{IDatasource}}
-#'  }
-#'  \item{initialize} {
-#'
-#'    \itemize{
-#'      \item{con }{\code{\link{ANY}}}
-#'    }
+#'    \code{\link[idata]{DataCon}}
 #'  }
 #' }
 #'
 #' @template authors
 #' @template references
-#' @example inst/examples/Datasource.R
+#' @example inst/examples/DataCon.IntelligentForecaster.Csv.R
 #'
 #' @import R6
 #' @export
-Datasource <- R6Class(
-  classname = "Datasource",
-  inherit = IDatasource,
+DataCon.IntelligentForecaster.Csv <- R6Class(
+  classname = "DataCon.IntelligentForecaster.Csv",
+  inherit = DataCon.IntelligentForecaster,
   portable = TRUE,
   public = list(
     ## Fields //
-    con = NULL,
-    hello_world = NULL,
+    con = character(),
+    cached = data.frame(),
 
     ## Methods //
     initialize = function(
-      ...,
-      hello_world = NULL
+      ...
     ) {
-      # self$con <- con
       super$initialize(...)
-      # print(self)
-      self$hello_world <- hello_world
     },
-    asExpectedInDatasource = function(
-      input
-    ) {
-
+    toExternalFormat = function() {
+      ## TODO 2015-10-19: implement advanced csv writer
+      self$cached
+      # TRUE
     },
-    asExpectedInR = function(
-      input
+    toRFormat = function(
+      cache = TRUE,
+      date_col = "date",
+      date_format = "%m/%d/%Y %H:%M:%S",
+      extended = FALSE,
+      with_ids = FALSE
     ) {
+      toRFormat(con = self)
+    },
+    pull = function(
+      format = TRUE,
+      cache = TRUE,
+      overwrite = FALSE
+    ) {
+      data <- pullFromCon(con = self)
+      if (cache) {
+        self$cached <- data
+      }
+      if (format) {
+        data <- toRFormat(con = self)
+        if (cache) {
+          self$cached <- data
+        }
+      }
+      data
+    },
+    push = function(
 
+    ) {
+      stop("DataCon.IntelligentForecaster.Csv: push: not implemented yet ")
+    }
+  ),
+  active = list(
+    cached_active = function(
+      value
+    ) {
+      if (missing(value)) {
+        if (!length(self$cached)) {
+          self$pull(cache = TRUE, format = TRUE)
+        }
+      } else {
+        self$cached <- value
+      }
+      self$cached
     }
   )
 )
 
-# Datasource.Neo4j ------------------------------------------------------------
+# DataCon.Neo4j ------------------------------------------------------------
 
 #' @title
 #' Connector for Neo4j
@@ -150,38 +318,40 @@ Datasource <- R6Class(
 #'
 #' @field con \code{\link{graph}}
 #'  Connection object
+#' @field cached \code{\link[base]{data.frame}}
+#'  Cached data state as data frame
 #'
-#' @section Methods:
+#' @section Public methods:
 #'
 #' \itemize{
 #'  \item{See superclass} {
-#'    \code{\link[idata]{IDatasource}}
+#'    \code{\link[idata]{IDataCon}}
 #'  }
 #' }
 #'
 #' @template authors
 #' @template references
-#' @example inst/examples/Datasource.Neo4j.R
+#' @example inst/examples/DataCon.Neo4j.R
 #'
 #' @import R6
 #' @export
-Datasource.Neo4j <- R6Class(
-  classname = "Datasource.Neo4j",
-  inherit = Datasource,
+DataCon.Neo4j <- R6Class(
+  classname = "DataCon.Neo4j",
+  inherit = DataCon,
   portable = TRUE,
   public = list(
     ## Fields //
     con = "graph",
+    cached = data.frame(),
 
     ## Methods //
     initialize = function(
       ...
     ) {
-      # self$con <- con
       super$initialize(...)
     },
-    asExpectedInDatasource = function(
-      input
+    toExternalFormat = function(
+      data
     ) {
       ## TODO 2015-1015: implement mechanism for rule sets
       rules <- list()
@@ -190,34 +360,34 @@ Datasource.Neo4j <- R6Class(
         "POSIXct"
       )
 
-      input_2 <- input
-      classes <- lapply(input_2, class)
+      data_2 <- data
+      classes <- lapply(data_2, class)
 
       # col=1
       for (col in 1:length(classes)) {
         if (any(classes[[col]] %in% rules$classes_invalid)) {
           colname <- names(classes)[col]
-          input_2[[colname]] <- as.character(input_2[[colname]])
+          data_2[[colname]] <- as.character(data_2[[colname]])
         }
       }
-      input_2
+      data_2
     },
-    asExpectedInR = function(
-      input
+    toRFormat = function(
+      data
     ) {
       ## TODO 2015-1015: implement mechanism for rule sets
       rules <- list()
       rules$rapid <- list(
-        function(input, name) {
+        function(data, name) {
           if (grepl("^date*", name)) {
-            input[[name]] <- as.POSIXlt(input[[name]])
+            data[[name]] <- as.POSIXlt(data[[name]])
           }
-          input
+          data
         }
       )
 
-      input_2 <- input
-      columns <- names(input)
+      data_2 <- data
+      columns <- names(data)
 
       rules_this <- rules$rapid
       # col=columns[1]
@@ -225,10 +395,18 @@ Datasource.Neo4j <- R6Class(
 
       for (col in columns) {
         for (rule in rules_this) {
-          input_2 <- rule(input = input_2, name = col)
+          data_2 <- rule(data = data_2, name = col)
         }
       }
-      input_2
+      data_2
+    },
+    pull = function(...) {
+      stop("DataCon.Neo4j: pull: not implemented yet ")
+    },
+    push = function(
+
+    ) {
+      stop("DataCon.Neo4j: push: not implemented yet ")
     }
   )
 )
