@@ -1,4 +1,30 @@
-#' @export
+getTimeId <- function(x, col, suffix = "_id") {
+  id_0 <- sort(unique(x[[col]]))
+  # id_1 <- seq(along = as.character(id_0))
+  id_1 <- 1:length(id_0)
+  structure(data.frame(
+    id_0,
+    id_1,
+    stringsAsFactors = FALSE
+  ), names = c(col, paste0(col, suffix)))
+
+  #   id_0 <- table(x[[col]])
+  #   id_1 <- names(id_0)
+  #   id_2 <- seq(along = id_1)
+  #   id <- lapply(seq(along = id_0), function(ii) {
+  # #     structure(data.frame(
+  # #       rep(id_1[ii], id_0[ii]),
+  # #       rep(id_2[ii], id_0[ii]),
+  # #       stringsAsFactors = FALSE
+  # #     ), names = c(col, paste0(col, suffix)))
+  #     structure(data.frame(
+  #       rep(id_2[ii], id_0[ii]),
+  #       stringsAsFactors = FALSE
+  #     ), names = paste0(col, suffix))
+  #   })
+  # do.call(rbind, id)
+}
+
 getDateAtoms <- function(
   x,
   as_list = FALSE,
