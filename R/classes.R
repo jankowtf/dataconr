@@ -263,6 +263,7 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
       extended = FALSE,
       with_ids = FALSE
     ) {
+      ## TODO 2015-10-26: implement private options
       toRFormat(con = self,
         data_col = date_col,
         date_format = date_format,
@@ -273,14 +274,15 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
     pull = function(
       format = TRUE,
       cache = TRUE,
-      overwrite = FALSE
+      overwrite = FALSE,
+      ...
     ) {
       data <- pullFromCon(con = self)
       if (cache) {
         self$cached <- data
       }
       if (format) {
-        data <- toRFormat(con = self)
+        data <- toRFormat(con = self, ...)
         if (cache) {
           self$cached <- data
         }

@@ -1,7 +1,7 @@
 Package: idata
 Type: Package
 Title: Interfaces for data sources
-Version: 0.5
+Version: 0.6
 Date: 2015-10-13
 Authors@R: person("Janko", "Thyson", email = "janko.thyson@rappster.de", role = c("aut", "cre"))
 Description: Interfaces for various data sources and related packages.

@@ -3,8 +3,8 @@
 \docType{data}
 \name{DataCon}
 \alias{DataCon}
-\title{Generic class for inheritance for connectors data location}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009ce1300> 
+\title{Generic class for inheritance for data connections}
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000acc6ec0> 
  - attr(*, "name")= chr "DataCon_generator"
 }}
 \usage{
