@@ -92,7 +92,9 @@ toRFormat.DataCon.Neo4j <- function(
   rules <- list()
   rules$rapid <- list(
     function(data, name) {
-      if (grepl("^date", name)) {
+      if (grepl("^date$", name)) {
+#         print(name)
+#         print(class(data[[name]]))
         data[[name]] <- as.POSIXlt(data[[name]])
       }
       data
