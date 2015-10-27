@@ -135,7 +135,8 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
       date_col = self$meta$toRFormat$date_col,
       date_format = self$meta$toRFormat$date_format,
       extended = self$meta$toRFormat$extended,
-      with_ids = self$meta$toRFormat$with_ids
+      with_ids = self$meta$toRFormat$with_ids,
+      ...
     ) {
       ## TODO 2015-10-26: implement private options
       toRFormat(
@@ -143,7 +144,8 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
         data_col = date_col,
         date_format = date_format,
         extended = extended,
-        with_ids = with_ids
+        with_ids = with_ids,
+        ...
       )
     },
     pull = function(
@@ -209,6 +211,7 @@ toRFormat.DataCon.IntelligentForecaster.Csv <- function(
   date_format = "%m/%d/%Y %H:%M:%S",
   extended = FALSE,
   with_ids = FALSE,
+  format_list = list(),
   ...
 ) {
   data <- con$cached
@@ -264,7 +267,11 @@ toRFormat.DataCon.IntelligentForecaster.Csv <- function(
   data$value <- as.numeric(gsub(",", ".", data$value))
 
   ## Saving meta information //
-  con$meta$toRFormat$columns <- names(data)
+  if (length(format_this <- format_list$columns)) {
+    con$meta$toRFormat$columns <- format_this
+  } else {
+    con$meta$toRFormat$columns <- names(data)
+  }
 
   data
 }

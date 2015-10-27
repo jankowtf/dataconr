@@ -4,7 +4,7 @@
 \alias{toRFormat.DataCon.Neo4j}
 \title{Format to R format}
 \usage{
-\method{toRFormat}{DataCon.Neo4j}(con)
+\method{toRFormat}{DataCon.Neo4j}(con, format_list = list())
 }
 \arguments{
 \item{con}{\code{\link[idata]{DataCon.Neo4j}}.}

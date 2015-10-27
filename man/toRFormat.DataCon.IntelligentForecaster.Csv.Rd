@@ -6,7 +6,7 @@
 \usage{
 \method{toRFormat}{DataCon.IntelligentForecaster.Csv}(con, date_col = "date",
   date_format = "\%m/\%d/\%Y \%H:\%M:\%S", extended = FALSE,
-  with_ids = FALSE, ...)
+  with_ids = FALSE, format_list = list(), ...)
 }
 \arguments{
 \item{con}{\code{\link[idata]{DataCon.IntelligentForecaster.Csv}}.}

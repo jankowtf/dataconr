@@ -82,7 +82,8 @@ DataCon.Neo4j <- R6Class(
 #' @example inst/examples/toRFormat.R
 #' @export
 toRFormat.DataCon.Neo4j <- function(
-  con
+  con,
+  format_list = list()
 ) {
   data <- con$cached
   ## TODO 2015-1015: implement mechanism for rule sets
@@ -110,6 +111,9 @@ toRFormat.DataCon.Neo4j <- function(
   }
 
   ## Meta information //
+  if (length(format_this <- format_list$columns)) {
+    con$meta$toRFormat$columns <- format_this
+  }
   if (length(idx <- con$meta$toRFormat$columns)) {
     data_2 <- data_2[ , idx]
   }
@@ -135,7 +139,8 @@ toRFormat.DataCon.Neo4j <- function(
 #' @example inst/examples/toExternalFormat.R
 #' @export
 toExternalFormat.DataCon.Neo4j <- function(
-  con
+  con,
+  format_list = list()
 ) {
   data <- con$cached
   ## TODO 2015-1015: implement mechanism for rule sets

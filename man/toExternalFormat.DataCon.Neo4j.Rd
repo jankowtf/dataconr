@@ -4,7 +4,7 @@
 \alias{toExternalFormat.DataCon.Neo4j}
 \title{Format to external format}
 \usage{
-\method{toExternalFormat}{DataCon.Neo4j}(con)
+\method{toExternalFormat}{DataCon.Neo4j}(con, format_list = list())
 }
 \arguments{
 \item{con}{\code{\link[idata]{DataCon.Neo4j}}.}

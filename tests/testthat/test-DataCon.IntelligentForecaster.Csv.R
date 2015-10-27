@@ -183,3 +183,18 @@ test_that("DataCon.IntelligentForecaster.Csv: meta: extended", {
   expect_true(all(names(data) %in% target_1))
   expect_true(all(!names(data) %in% setdiff(target_2, target_1)))
 })
+
+
+# Format ------------------------------------------------------------------
+
+context("DataCon.IntelligentForecaster.Csv: format")
+
+test_that("DataCon.IntelligentForecaster.Csv: format", {
+  path <- withCorrectWorkingDir(
+    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv", filepath)
+  )
+  expect_true(file.exists(path))
+  inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
+  data <- inst$pull(format_list = list(columns = "a"))
+  expect_identical(inst$meta$toRFormat$columns, "a")
+})
