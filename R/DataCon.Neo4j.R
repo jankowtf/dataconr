@@ -45,14 +45,16 @@ DataCon.Neo4j <- R6Class(
       super$initialize(...)
     },
     toExternalFormat = function(
-      con
+      con,
+      ...
     ) {
-      toExternalFormat(con = self)
+      toExternalFormat(con = self, ...)
     },
     toRFormat = function(
-      con
+      con,
+      ...
     ) {
-      toRFormat(con = self)
+      toRFormat(con = self, ...)
     },
     pull = function(...) {
       stop("DataCon.Neo4j: pull: not implemented yet ")

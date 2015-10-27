@@ -126,7 +126,7 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
       super$initialize(...)
       self$meta <- meta
     },
-    toExternalFormat = function() {
+    toExternalFormat = function(...) {
       ## TODO 2015-10-19: implement advanced csv writer
       self$cached
       # TRUE
