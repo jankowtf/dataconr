@@ -137,6 +137,7 @@ test_that("DataCon.IntelligentForecaster.Csv: pull: extended", {
   expect_true(file.exists(path))
   inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
   expect_is(res <- inst$pull(extended = TRUE, with_ids = TRUE), "data.frame")
+  # sapply(res, class)
   expect_true(nrow(res) > 0)
   expect_true(nrow(inst$cached) > 0)
 })
