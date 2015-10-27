@@ -264,7 +264,7 @@ toRFormat.DataCon.IntelligentForecaster.Csv <- function(
   data$value <- as.numeric(gsub(",", ".", data$value))
 
   ## Saving meta information //
-  con$meta$column_order <- names(data)
+  con$meta$toRFormat$columns <- names(data)
 
   data
 }

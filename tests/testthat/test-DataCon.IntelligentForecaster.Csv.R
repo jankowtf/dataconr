@@ -149,9 +149,9 @@ test_that("DataCon.IntelligentForecaster.Csv: meta", {
   )
   expect_true(file.exists(path))
   inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
-  expect_null(inst$meta$column_order)
+  expect_null(inst$meta$toRFormat$columns)
   data <- inst$pull(extended = TRUE, with_ids = TRUE)
-  expect_is(inst$meta$column_order, "character")
+  expect_is(inst$meta$toRFormat$columns, "character")
 })
 
 test_that("DataCon.IntelligentForecaster.Csv: meta: extended", {

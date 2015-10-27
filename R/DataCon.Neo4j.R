@@ -110,7 +110,7 @@ toRFormat.DataCon.Neo4j <- function(
   }
 
   ## Meta information //
-  if (length(idx <- con$meta$column_order)) {
+  if (length(idx <- con$meta$toRFormat$columns)) {
     data_2 <- data_2[ , idx]
   }
 
