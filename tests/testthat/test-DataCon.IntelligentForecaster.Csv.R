@@ -165,13 +165,13 @@ test_that("DataCon.IntelligentForecaster.Csv: meta: extended", {
   inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
 
   ## Default meta value //
-  expect_true(inst$meta$extended == FALSE)
+  expect_true(inst$meta$toRFormat$extended == FALSE)
   data <- inst$pull()
   target_1 <- c("id", "date", "value", "comment", "note")
   expect_true(all(names(data) %in% target_1))
 
   ## Change meta value //
-  inst$meta$extended <- TRUE
+  inst$meta$toRFormat$extended <- TRUE
   data <- inst$pull()
   target_2 <- c(target_1, "date_day", "date_year", "date_month", "date_week",
     "date_day_year", "date_day_month", "date_day_week", "date_hour", "date_minute",
