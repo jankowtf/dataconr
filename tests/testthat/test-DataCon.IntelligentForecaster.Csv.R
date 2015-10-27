@@ -1,4 +1,5 @@
 library(reltest)
+filepath <- "csv_1_small.csv"
 
 context("DataCon.IntelligentForecaster.Csv")
 
@@ -22,7 +23,7 @@ test_that("DataCon.IntelligentForecaster.Csv: initialize", {
 
 test_that("DataCon.IntelligentForecaster.Csv: getter/setter", {
   path <- withCorrectWorkingDir(
-    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv/csv_1.csv")
+    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv", filepath)
   )
   expect_true(file.exists(path))
   inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
@@ -46,7 +47,7 @@ test_that("DataCon.IntelligentForecaster.Csv :: pull(format = FALSE)", {
   expect_error(res <- inst$pull(), "must be a character string or connection")
 
   path <- withCorrectWorkingDir(
-    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv/csv_1.csv")
+    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv", filepath)
   )
   expect_true(file.exists(path))
   inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
@@ -60,7 +61,7 @@ test_that("DataCon.IntelligentForecaster.Csv: pull", {
   expect_error(res <- inst$pull(), "must be a character string or connection")
 
   path <- withCorrectWorkingDir(
-    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv/csv_1.csv")
+    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv", filepath)
   )
   expect_true(file.exists(path))
   inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
@@ -78,7 +79,7 @@ test_that("DataCon.IntelligentForecaster.Csv: toRFormat: empty", {
 
 test_that("DataCon.IntelligentForecaster.Csv::toRFormat", {
   path <- withCorrectWorkingDir(
-    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv/csv_1.csv")
+    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv", filepath)
   )
   expect_true(file.exists(path))
   inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
@@ -96,7 +97,7 @@ test_that("DataCon.IntelligentForecaster.Csv::toExternalFormat", {
   expect_identical(res <- inst$toExternalFormat(), data.frame())
 
   path <- withCorrectWorkingDir(
-    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv/csv_1.csv")
+    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv", filepath)
   )
   expect_true(file.exists(path))
   inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
@@ -110,7 +111,7 @@ test_that("DataCon.IntelligentForecaster.Csv::toExternalFormat", {
 
 test_that("DataCon.IntelligentForecaster.Csv: cached_active: get", {
   path <- withCorrectWorkingDir(
-    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv/csv_1.csv")
+    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv", filepath)
   )
   expect_true(file.exists(path))
   inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
@@ -131,7 +132,7 @@ test_that("DataCon.IntelligentForecaster.Csv: cached_active: set", {
 
 test_that("DataCon.IntelligentForecaster.Csv: pull: extended", {
   path <- withCorrectWorkingDir(
-    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv/csv_1.csv")
+    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv", filepath)
   )
   expect_true(file.exists(path))
   inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
@@ -144,11 +145,41 @@ test_that("DataCon.IntelligentForecaster.Csv: pull: extended", {
 
 test_that("DataCon.IntelligentForecaster.Csv: meta", {
   path <- withCorrectWorkingDir(
-    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv/csv_1.csv")
+    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv", filepath)
   )
   expect_true(file.exists(path))
   inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
   expect_null(inst$meta$column_order)
   data <- inst$pull(extended = TRUE, with_ids = TRUE)
   expect_is(inst$meta$column_order, "character")
+})
+
+test_that("DataCon.IntelligentForecaster.Csv: meta: extended", {
+  path <- withCorrectWorkingDir(
+    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv",
+      filepath)
+  )
+  expect_true(file.exists(path))
+
+  # DataCon.IntelligentForecaster.Csv$debug("pull")
+  inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
+
+  ## Default meta value //
+  expect_true(inst$meta$extended == FALSE)
+  data <- inst$pull()
+  target_1 <- c("id", "date", "value", "comment", "note")
+  expect_true(all(names(data) %in% target_1))
+
+  ## Change meta value //
+  inst$meta$extended <- TRUE
+  data <- inst$pull()
+  target_2 <- c(target_1, "date_day", "date_year", "date_month", "date_week",
+    "date_day_year", "date_day_month", "date_day_week", "date_hour", "date_minute",
+    "date_second")
+  expect_true(all(names(data) %in% target_2))
+
+  ## Overwrite meta value //
+  data <- inst$pull(extended = FALSE)
+  expect_true(all(names(data) %in% target_1))
+  expect_true(all(!names(data) %in% setdiff(target_2, target_1)))
 })

@@ -252,9 +252,22 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
 
     ## Methods //
     initialize = function(
-      ...
+      ...,
+      meta = list(
+        ## Format //
+        date_col = "date",
+        date_format = "%m/%d/%Y %H:%M:%S",
+        extended = FALSE,
+        with_ids = FALSE,
+
+        ## Pull //
+        format = TRUE,
+        cache = TRUE,
+        overwrite = FALSE
+      )
     ) {
       super$initialize(...)
+      self$meta <- meta
     },
     toExternalFormat = function() {
       ## TODO 2015-10-19: implement advanced csv writer
@@ -262,14 +275,15 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
       # TRUE
     },
     toRFormat = function(
-      cache = TRUE,
-      date_col = "date",
-      date_format = "%m/%d/%Y %H:%M:%S",
-      extended = FALSE,
-      with_ids = FALSE
+      cache = self$meta$cache,
+      date_col = self$meta$date_col,
+      date_format = self$meta$date_format,
+      extended = self$meta$extended,
+      with_ids = self$meta$with_ids
     ) {
       ## TODO 2015-10-26: implement private options
-      toRFormat(con = self,
+      toRFormat(
+        con = self,
         data_col = date_col,
         date_format = date_format,
         extended = extended,
@@ -277,9 +291,9 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
       )
     },
     pull = function(
-      format = TRUE,
-      cache = TRUE,
-      overwrite = FALSE,
+      format = self$meta$format,
+      cache = self$meta$cache,
+      overwrite = self$meta$overwrite,
       ...
     ) {
       data <- pullFromCon(con = self)
@@ -287,7 +301,8 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
         self$cached <- data
       }
       if (format) {
-        data <- toRFormat(con = self, ...)
+        # data <- toRFormat(con = self, ...)
+        data <- self$toRFormat(...)
         if (cache) {
           self$cached <- data
         }
@@ -306,7 +321,7 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
     ) {
       if (missing(value)) {
         if (!length(self$cached)) {
-          self$pull(cache = TRUE, format = TRUE)
+          self$pull()
         }
       } else {
         self$cached <- value

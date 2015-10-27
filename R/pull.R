@@ -41,6 +41,7 @@ pullFromCon.DataCon.IntelligentForecaster.Csv <- function(
   data <- read.csv2(path, sep = ";", dec = ",", header = FALSE,
     stringsAsFactors = FALSE)[-1, ]
   # head(data)
+  # nrow(data)
   nms <- tolower(as.character(data[1, ]))
   nms <- gsub("^moment$", "date", nms)
   data <- data[-1, ]

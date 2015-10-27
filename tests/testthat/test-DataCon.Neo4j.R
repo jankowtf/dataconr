@@ -1,4 +1,5 @@
 library(RNeo4j)
+filepath <- "csv_1_small.csv"
 
 context("DataCon.Neo4j")
 
@@ -45,7 +46,7 @@ test_that("DataCon.Neo4j: toRFormat", {
 
 test_that("DataCon.IntelligentForecaster.Csv + DataCon.Neo4j: meta: column order", {
   path <- withCorrectWorkingDir(
-    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv/csv_1.csv")
+    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv", filepath)
   )
   expect_true(file.exists(path))
   inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
