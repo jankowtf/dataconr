@@ -4,7 +4,7 @@
 \name{IDataCon}
 \alias{IDataCon}
 \title{Class that functions as an interface for data connections}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000acf5ca0> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000acf2c98> 
  - attr(*, "name")= chr "IDataCon_generator"
 }}
 \usage{
