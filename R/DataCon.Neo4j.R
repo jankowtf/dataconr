@@ -25,7 +25,7 @@
 #'
 #' @template authors
 #' @template references
-#' @example inst/examples/DataCon.Neo4j.R
+#' @example inst/examples/example-DataCon.Neo4j.R
 #'
 #' @import R6
 #' @export
@@ -81,7 +81,7 @@ DataCon.Neo4j <- R6Class(
 #'
 #' @param con \code{\link[idata]{DataCon.Neo4j}}.
 #' @return Formated \code{\link[base]{data.frame}}.
-#' @example inst/examples/toRFormat.R
+#' @example inst/examples/example-toRFormat.R
 #' @export
 toRFormat.DataCon.Neo4j <- function(
   con,
@@ -141,7 +141,7 @@ toRFormat.DataCon.Neo4j <- function(
 #'
 #' @param con \code{\link[idata]{DataCon.Neo4j}}.
 #' @return Formated \code{\link[base]{data.frame}}.
-#' @example inst/examples/toExternalFormat.R
+#' @example inst/examples/example-toExternalFormat.R
 #' @export
 toExternalFormat.DataCon.Neo4j <- function(
   con,

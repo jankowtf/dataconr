@@ -9,7 +9,7 @@
 #'
 #' @param con A connection object
 #' @return See respective methods.
-#' @example inst/examples/toRFormat.R
+#' @example inst/examples/example-toRFormat.R
 #' @export
 toRFormat <- function(con, ...) {
   UseMethod("toRFormat", con)
@@ -26,7 +26,7 @@ toRFormat <- function(con, ...) {
 #'
 #' @param con A connection object
 #' @return See respective methods.
-#' @example inst/examples/toExternalFormat.R
+#' @example inst/examples/example-toExternalFormat.R
 #' @export
 toExternalFormat <- function(con) {
   UseMethod("toExternalFormat", con)
@@ -43,7 +43,7 @@ toExternalFormat <- function(con) {
 #'
 #' @param con A connection object
 #' @return See respective methods.
-#' @example inst/examples/pullFromCon.R
+#' @example inst/examples/example-pullFromCon.R
 #' @export
 pullFromCon <- function(con) {
   UseMethod("pullFromCon", con)

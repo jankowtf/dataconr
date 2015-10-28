@@ -22,7 +22,7 @@
 #'  \code{TRUE}: include actual files;
 #'  \code{FALSE}: do not include files. See examples.
 #' @return \code{\link[base]{list}}.
-#' @example inst/examples/mapDirectory.R
+#' @example inst/examples/example-mapDirectory.R
 #' @template authors
 #' @template references
 #' @export
@@ -98,7 +98,7 @@ mapDataConToList <- function(con) {
 #' @param con \code{\link[RNeo4j]{graph}}.
 #'  Neo4j graph.
 #' @return \code{\link[base]{list}}.
-#' @example inst/examples/mapDataConToList.graph.R
+#' @example inst/examples/example-mapDataConToList.graph.R
 #' @template authors
 #' @template references
 #' @export
@@ -199,7 +199,7 @@ mapDataConToList.graph <- function(
 #' @param con \code{\link[RNeo4j]{DataCon.Neo4j}}.
 #'  Neo4j graph wrapped by connector class.
 #' @return \code{\link[base]{list}}.
-#' @example inst/examples/mapDataConToList.DataCon.Neo4j.R
+#' @example inst/examples/example-mapDataConToList.DataCon.Neo4j.R
 #' @template authors
 #' @template references
 #' @export

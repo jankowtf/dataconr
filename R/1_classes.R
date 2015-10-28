@@ -29,9 +29,9 @@
 #' \itemize{
 #'  \item{initialize} {
 #'  }
-#'  \item{toExternalFormat} {
+#'  \item{toExternalData} {
 #'  }
-#'  \item{toRFormat} {
+#'  \item{toRData} {
 #'  }
 #'  \item{pull} {
 #'  }
@@ -41,7 +41,7 @@
 #'
 #' @template authors
 #' @template references
-#' @example inst/examples/IDataCon.R
+#' @example inst/examples/example-IDataCon.R
 #'
 #' @import R6
 #' @export
@@ -54,8 +54,8 @@ IDataCon <- R6Class(
     getCachedActive = function(...) {},
     setCached = function(...) {},
     setCachedActive = function(...) {},
-    toExternalFormat = function(...) {},
-    toRFormat = function(...) {},
+    toExternalData = function(...) {},
+    toRData = function(...) {},
     pull = function(...) {},
     push = function(...) {}
   )
@@ -95,7 +95,7 @@ IDataCon <- R6Class(
 #'
 #' @template authors
 #' @template references
-#' @example inst/examples/DataCon.R
+#' @example inst/examples/example-DataCon.R
 #'
 #' @import R6
 #' @export
@@ -129,11 +129,11 @@ DataCon <- R6Class(
     setCachedActive = function(value) {
       self$cached_active <- value
     },
-    toExternalFormat = function() {
-      stop("DataCon: toExternalFormat: not implemented")
+    toExternalData = function() {
+      stop("DataCon: toExternalData: not implemented")
     },
-    toRFormat = function(...) {
-      stop("DataCon: toRFormat: not implemented")
+    toRData = function(...) {
+      stop("DataCon: toRData: not implemented")
     },
     pull = function(...) {
       stop("DataCon: pull: not implemented")
@@ -144,7 +144,7 @@ DataCon <- R6Class(
   )
 )
 
-# IFormat -----------------------------------------------------------------
+# IData -----------------------------------------------------------------
 
 #' @title
 #' Class that functions as an interface for format information
@@ -159,9 +159,21 @@ DataCon <- R6Class(
 #' @section Getters/setters:
 #'
 #' \itemize{
+#'  \item{getData} {
+#'  }
+#'  \item{setData} {
+#'  }
 #'  \item{getFormat} {
 #'  }
 #'  \item{setFormat} {
+#'  }
+#'  \item{getMetaFormat} {
+#'  }
+#'  \item{setMetaFormat} {
+#'  }
+#'  \item{getOrder} {
+#'  }
+#'  \item{setOrder} {
 #'  }
 #' }
 #'
@@ -170,25 +182,43 @@ DataCon <- R6Class(
 #' \itemize{
 #'  \item{initialize} {
 #'  }
+#'  \item{applyMetaFormat} {
+#'  }
+#'  \item{applyFormat} {
+#'  }
+#'  \item{cacheOrder} {
+#'  }
+#'  \item{applyOrder} {
+#'  }
 #' }
 #'
 #' @template authors
 #' @template references
-#' @example inst/examples/IFormat.R
+#' @example inst/examples/example-IData.R
 #'
 #' @import R6
 #' @export
-IFormat <- R6Class(
-  classname = "IFormat",
+IData <- R6Class(
+  classname = "IData",
   portable = TRUE,
   public = list(
     ## Methods //
-    getFormat = function(...) {},
-    setFormat = function(...) {}
+    getData = function() {},
+    setData = function() {},
+    getFormat = function() {},
+    setFormat = function() {},
+    getOrder = function() {},
+    setOrder = function() {},
+    getMetaFormat = function() {},
+    setMetaFormat = function() {},
+    applyMetaFormat = function() {},
+    applyFormat = function() {},
+    cacheOrder = function() {},
+    applyOrder = function() {}
   )
 )
 
-# Format ------------------------------------------------------------------
+# Data ------------------------------------------------------------------
 
 #' @title
 #' Generic class for inheritance for format information
@@ -202,13 +232,13 @@ IFormat <- R6Class(
 #' @field con \code{\link{ANY}}
 #'  Connection to a data source
 #' @field format \code{\link{list}}
-#'  Format information
+#'  Data information
 #'
 #' @section Getters/setters:
 #'
 #' \itemize{
 #'  \item{See superclass} {
-#'    \code{\link[idata]{IFormat}}
+#'    \code{\link[idata]{IData}}
 #'  }
 #' }
 #'
@@ -216,35 +246,128 @@ IFormat <- R6Class(
 #'
 #' \itemize{
 #'  \item{See interface} {
-#'    \code{\link[idata]{IFormat}}
+#'    \code{\link[idata]{IData}}
 #'  }
 #' }
 #'
 #' @template authors
 #' @template references
-#' @example inst/examples/Format.R
+#' @example inst/examples/example-Data.R
 #'
 #' @import R6
 #' @export
-Format <- R6Class(
-  classname = "Format",
-  inherit = IFormat,
+Data <- R6Class(
+  classname = "Data",
+  inherit = IData,
   portable = TRUE,
   public = list(
     ## Fields //
+    data = NULL,
     format = list(),
+    meta_format = list(),
+    order = list(),
 
     ## Methods //
     initialize = function(
-      format = list()
+      data = data.frame(),
+      meta_format = list(),
+      format = list(),
+      order = list()
     ) {
+      self$data <- data
+      self$meta_format <- meta_format
       self$format <- format
+      self$order <- order
+    },
+    getData = function() {
+      self$data
+    },
+    setData = function(value) {
+      self$data <- value
+    },
+    getMetaFormat = function() {
+      self$meta_format
+    },
+    setMetaFormat = function(value) {
+      self$meta_format <- value
     },
     getFormat = function() {
       self$format
     },
     setFormat = function(value) {
       self$format <- value
+    },
+    getOrder = function() {
+      self$order
+    },
+    setOrder = function(value) {
+      self$order <- value
+    },
+    applyFormat = function(
+      type = c("r", "ext")
+    ) {
+      stop("Data: applyFormat: not implemented yet")
+      data <- self$data
+      format <- self$meta_format
+      type <- match.arg(type, c("r", "ext"))
+      if (length(format)) {
+        lapply(format, function(this) {
+          if (type == "r") {
+            pattern_1 <- "_r"
+            pattern_2 <- "_r_?"
+          } else if (type == "ext") {
+            pattern_1 <- "_ext"
+            pattern_2 <- "_ext_?"
+          }
+          this <- this[grep(pattern_2, names(this), value = TRUE)]
+          names(this) <- gsub(pattern_1, "", names(this))
+
+          name <- this$name_r_handler(this$name_r)
+          data[[this$name_r]]
+        })
+      }
+    },
+    applyMetaFormat = function(
+      type = c("r", "ext")
+    ) {
+      data <- self$data
+      format <- self$meta_format
+      type <- match.arg(type, c("r", "ext"))
+      if (length(format)) {
+        format <- format[[type]]
+        for (handler in format) {
+          data <- handler(data)
+        }
+        self$data <- data
+      }
+      self$data
+    },
+    cacheOrder = function() {
+      ord <- list(
+        rows = rownames(self$data),
+        columns = names(self$data)
+      )
+      self$setOrder(ord)
+      ord
+    },
+    applyOrder = function(
+      scope = c("columns", "rows", "both")
+    ) {
+      scope <- match.arg(scope, c("columns", "rows", "both"))
+      ord <- self$getOrder()
+      data <- self$getData()
+      if (scope == "columns" && !is.null(idx <- ord$columns)) {
+        data <- data[ , idx]
+      } else if (scope == "rows" && !is.null(idx <- ord$rows)) {
+        data <- data[idx , ]
+      } else if (
+          scope == "both" &&
+          !is.null(idx_r <- ord$rows) &&
+          !is.null(idx_c <- ord$columns)
+      ) {
+        data <- data[idx_r , idx_c]
+      }
+      self$setData(data)
     }
   )
 )

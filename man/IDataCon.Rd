@@ -4,7 +4,7 @@
 \name{IDataCon}
 \alias{IDataCon}
 \title{Class that functions as an interface for data connections}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x000000000aceec78> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009cf4240> 
  - attr(*, "name")= chr "IDataCon_generator"
 }}
 \usage{
@@ -38,9 +38,9 @@ rigid OOP contexts such as \emph{C#} or the like
 \itemize{
  \item{initialize} {
  }
- \item{toExternalFormat} {
+ \item{toExternalData} {
  }
- \item{toRFormat} {
+ \item{toRData} {
  }
  \item{pull} {
  }

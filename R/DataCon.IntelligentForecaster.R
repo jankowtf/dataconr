@@ -31,7 +31,7 @@
 #'
 #' @template authors
 #' @template references
-#' @example inst/examples/DataCon.IntelligentForecaster.R
+#' @example inst/examples/example-DataCon.IntelligentForecaster.R
 #'
 #' @import R6
 #' @export
@@ -89,7 +89,7 @@ DataCon.IntelligentForecaster <- R6Class(
 #'
 #' @template authors
 #' @template references
-#' @example inst/examples/DataCon.IntelligentForecaster.Csv.R
+#' @example inst/examples/example-DataCon.IntelligentForecaster.Csv.R
 #'
 #' @import R6
 #' @export
@@ -203,7 +203,7 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
 #'
 #' @param con \code{\link[idata]{DataCon.IntelligentForecaster.Csv}}.
 #' @return Formated \code{\link[base]{data.frame}}.
-#' @example inst/examples/toRFormat.R
+#' @example inst/examples/example-toRFormat.R
 #' @export
 toRFormat.DataCon.IntelligentForecaster.Csv <- function(
   con,
@@ -290,7 +290,7 @@ toRFormat.DataCon.IntelligentForecaster.Csv <- function(
 #'
 #' @param con \code{\link[idata]{DataCon.IntelligentForecaster.Csv}}.
 #' @return \code{\link[base]{data.frame}}.
-#' @example inst/examples/pullFromCon.R
+#' @example inst/examples/example-pullFromCon.R
 #' @export
 pullFromCon.DataCon.IntelligentForecaster.Csv <- function(
   con
