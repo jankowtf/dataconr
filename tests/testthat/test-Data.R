@@ -9,16 +9,26 @@ test_that("Data: instantiate: empty", {
 })
 
 test_that("Data: instantiate: values", {
-  inst <- Data$new(data = data.frame(letters), format = list(letters))
+  format_dummy <- DataFormat$new()
+  inst <- Data$new(
+    data = data.frame(letters),
+    r_format = format_dummy,
+    ext_format = format_dummy,
+    r_meta_format = format_dummy,
+    ext_meta_format = format_dummy
+  )
   expect_identical(inst$data, data.frame(letters))
-  expect_identical(inst$format, list(letters))
+  expect_identical(inst$r_format, format_dummy)
+  expect_identical(inst$ext_format, format_dummy)
+  expect_identical(inst$r_meta_format, format_dummy)
+  expect_identical(inst$ext_meta_format, format_dummy)
 })
 
 # Apply format -----------------------------------------------------------
 
-context("Data: apply format")
+context("Data: apply R format")
 
-test_that("Data: apply format", {
+test_that("Data: apply R format", {
   skip("Not implemented yet")
   data <- data.frame(
     x_1 = 10,
@@ -70,17 +80,17 @@ test_that("Data: apply format", {
       position_ext_handler = NULL
     )
   )
-  Data$debug("applyFormat")
-  inst <- Data$new(data = data, format = format)
+  Data$debug("applyRFormat")
+  inst <- Data$new(data = data, r_format = r_format)
   inst$applyFormat(type = "r")
 })
 
 
 # Apply meta format -------------------------------------------------------
 
-context("Data: apply meta format: to R")
+context("Data: apply meta format")
 
-test_that("Data: apply meta format: to R", {
+test_that("Data: apply meta format", {
   data_r <- data.frame(
     x_1 = seq(10, 20, 5),
     x_2 = seq(as.POSIXct("2015-01-01"), length.out = 3, by = "1 days"),
@@ -92,8 +102,8 @@ test_that("Data: apply meta format: to R", {
     x.3 = TRUE
   )
 
-  format <- list(
-    r = list(
+  r_meta_format <- DataFormat$new(
+    format = list(
       function(x, pattern = "\\d{4}-\\d{2}-\\d{2}") {
         tmp <- lapply(x, function(ii) {
           if (any(grepl(pattern, ii))) {
@@ -108,8 +118,10 @@ test_that("Data: apply meta format: to R", {
         names(x) <- gsub("\\.", "_", names(x))
         x
       }
-    ),
-    ext = list(
+    )
+  )
+  ext_meta_format <- DataFormat$new(
+    format = list(
       function(x, pattern = "\\d{4}-\\d{2}-\\d{2}") {
         tmp <- lapply(x, function(ii) {
           if (any(grepl(pattern, ii))) {
@@ -126,24 +138,23 @@ test_that("Data: apply meta format: to R", {
       }
     )
   )
-  #   Data$debug("applyMetaFormat")
-  #   Data$undebug("applyMetaFormat")
+  #   Data$debug("applyRMetaFormat")
+  #   Data$undebug("applyRMetaFormat")
 
   ## To R //
-  inst <- Data$new(data = data_ext, meta_format = format)
-  expect_is(res <- inst$applyMetaFormat(type = "r"), "data.frame")
+  inst <- Data$new(data = data_ext, r_meta_format = r_meta_format)
+  expect_is(res <- inst$applyRMetaFormat(), "data.frame")
   expect_true(nrow(res) > 0)
   expect_false(all(grepl("\\.", names(inst$data))))
   expect_true(inherits(inst$data$x_2, "POSIXct"))
 
   ## To external //
-  inst <- Data$new(data = data_r, meta_format = format)
-  expect_is(res <- inst$applyMetaFormat(type = "ext"), "data.frame")
+  inst <- Data$new(data = data_r, ext_meta_format = ext_meta_format)
+  expect_is(res <- inst$applyExternalMetaFormat(), "data.frame")
   expect_true(nrow(res) > 0)
   expect_false(all(grepl("_", names(inst$data))))
   expect_true(inherits(inst$data$x.2, "character"))
 })
-
 
 # Order -------------------------------------------------------------------
 
@@ -156,7 +167,7 @@ test_that("Data: cache order", {
     x_3 = TRUE
   )
 
-  inst <- Data$new(data = data_r, meta_format = format)
+  inst <- Data$new(data = data_r)
   expect_identical(inst$order, list())
   expect_is(res <- inst$cacheOrder(), "list")
   expect_identical(inst$order, list(
@@ -174,7 +185,7 @@ test_that("Data: apply order", {
     x_3 = TRUE
   )
 
-  inst <- Data$new(data = data_r, meta_format = format)
+  inst <- Data$new(data = data_r)
   inst$cacheOrder()
   idx_r <- c("3", "1", "2")
   idx_c <- c("x_3", "x_1", "x_2")
@@ -197,5 +208,3 @@ test_that("Data: apply order", {
   expect_is(inst$applyOrder("both"), "data.frame")
   expect_identical(inst$getData(), data_r)
 })
-
-

@@ -16,8 +16,8 @@ data_ext <- data.frame(
 
 # Example meta format -----------------------------------------------------
 
-meta_format <- list(
-  r = list(
+r_meta_format <- DataFormat$new(
+  format = list(
     function(x, pattern = "\\d{4}-\\d{2}-\\d{2}") {
       tmp <- lapply(x, function(ii) {
         if (any(grepl(pattern, ii))) {
@@ -32,8 +32,10 @@ meta_format <- list(
       names(x) <- gsub("\\.", "_", names(x))
       x
     }
-  ),
-  ext = list(
+  )
+)
+ext_meta_format <- DataFormat$new(
+  format = list(
     function(x, pattern = "\\d{4}-\\d{2}-\\d{2}") {
       tmp <- lapply(x, function(ii) {
         if (any(grepl(pattern, ii))) {
@@ -53,9 +55,9 @@ meta_format <- list(
 
 # Apply R format  ---------------------------------------------------------
 
-inst <- Data$new(data = data_ext, meta_format = meta_format)
+inst <- Data$new(data = data_ext, r_meta_format = r_meta_format)
 data_before <- inst$getData()
-inst$applyMetaFormat(type = "r")
+inst$applyRMetaFormat()
 data_after <- inst$getData()
 
 ## Names comparison //
@@ -68,9 +70,10 @@ sapply(data_after, class)
 
 # Apply external format ---------------------------------------------------
 
-inst <- Data$new(data = data_r, meta_format = meta_format)
+Data$undebug("applyExternalMetaFormat")
+inst <- Data$new(data = data_r, ext_meta_format = ext_meta_format)
 data_before <- inst$getData()
-inst$applyMetaFormat(type = "ext")
+inst$applyExternalMetaFormat()
 data_after <- inst$getData()
 
 ## Names comparison //

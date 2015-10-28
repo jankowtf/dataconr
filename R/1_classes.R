@@ -7,9 +7,7 @@
 #' @description
 #' Defines the interface for data connections.
 #'
-#' @details
-#' The terms \emph{interace} is used in a looser context than in more
-#' rigid OOP contexts such as \emph{C#} or the like
+#' @template interface_section
 #'
 #' @section Getters/setters:
 #'
@@ -144,17 +142,115 @@ DataCon <- R6Class(
   )
 )
 
+# IDataFormat -----------------------------------------------------------------
+
+#' @title
+#' Class that functions as an interface for data format information
+#'
+#' @description
+#' Defines the interface for data format information.
+#'
+#' @template interface_section
+#'
+#' @section Getters/setters:
+#'
+#' \itemize{
+#'  \item{getFormat} {
+#'  }
+#'  \item{setFormat} {
+#'  }
+#' }
+#'
+#' @section Public methods:
+#'
+#' \itemize{
+#'  TODO
+#' }
+#'
+#' @template authors
+#' @template references
+#' @example inst/examples/example-IDataFormat.R
+#'
+#' @import R6
+#' @export
+IDataFormat <- R6Class(
+  classname = "IDataFormat",
+  portable = TRUE,
+  public = list(
+    ## Methods //
+    getFormat = function() {},
+    setFormat = function() {}
+  )
+)
+
+# DataFormat --------------------------------------------------------------
+
+#' @title
+#' Generic class for inheritance for data format information
+#'
+#' @description
+#' TODO
+#'
+#' @details
+#' TODO
+#'
+#' @field format \code{\link{list}}
+#'  Data format information
+#'
+#' @section Getters/setters:
+#'
+#' \itemize{
+#'  \item{See superclass} {
+#'    \code{\link[idata]{IDataFormat}}
+#'  }
+#' }
+#'
+#' @section Public methods:
+#'
+#' \itemize{
+#'  \item{See interface} {
+#'    \code{\link[idata]{IDataFormat}}
+#'  }
+#' }
+#'
+#' @template authors
+#' @template references
+#' @example inst/examples/example-DataFormat.R
+#'
+#' @import R6
+#' @export
+DataFormat <- R6Class(
+  classname = "DataFormat",
+  inherit = IDataFormat,
+  portable = TRUE,
+  public = list(
+    ## Fields //
+    format = list(),
+
+    ## Methods //
+    initialize = function(
+      format = list()
+    ) {
+      self$format <- format
+    },
+    getFormat = function() {
+      self$format
+    },
+    setFormat = function(value) {
+      self$format <- value
+    }
+  )
+)
+
 # IData -----------------------------------------------------------------
 
 #' @title
-#' Class that functions as an interface for format information
+#' Class that functions as an interface for unified data respresentations
 #'
 #' @description
-#' Defines the interface for format information.
+#' Defines the interface for unified data respresentations.
 #'
-#' @details
-#' The terms \emph{interace} is used in a looser context than in more
-#' rigid OOP contexts such as \emph{C#} or the like
+#' @template interface_section
 #'
 #' @section Getters/setters:
 #'
@@ -163,13 +259,21 @@ DataCon <- R6Class(
 #'  }
 #'  \item{setData} {
 #'  }
-#'  \item{getFormat} {
+#'  \item{getRFormat} {
 #'  }
-#'  \item{setFormat} {
+#'  \item{setRFormat} {
 #'  }
-#'  \item{getMetaFormat} {
+#'  \item{getExternalFormat} {
 #'  }
-#'  \item{setMetaFormat} {
+#'  \item{setExternalFormat} {
+#'  }
+#'  \item{getRMetaFormat} {
+#'  }
+#'  \item{setRMetaFormat} {
+#'  }
+#'  \item{getExternalMetaFormat} {
+#'  }
+#'  \item{setExternalMetaFormat} {
 #'  }
 #'  \item{getOrder} {
 #'  }
@@ -182,9 +286,13 @@ DataCon <- R6Class(
 #' \itemize{
 #'  \item{initialize} {
 #'  }
-#'  \item{applyMetaFormat} {
+#'  \item{applyRMetaFormat} {
 #'  }
-#'  \item{applyFormat} {
+#'  \item{applyExternalMetaFormat} {
+#'  }
+#'  \item{applyRFormat} {
+#'  }
+#'  \item{applyExternalFormat} {
 #'  }
 #'  \item{cacheOrder} {
 #'  }
@@ -205,14 +313,20 @@ IData <- R6Class(
     ## Methods //
     getData = function() {},
     setData = function() {},
-    getFormat = function() {},
-    setFormat = function() {},
+    getRFormat = function() {},
+    setRFormat = function() {},
+    getExternalFormat = function() {},
+    setExternalFormat = function() {},
+    getRMetaFormat = function() {},
+    setRMetaFormat = function() {},
+    getExternalMetaFormat = function() {},
+    setExternalMetaFormat = function() {},
     getOrder = function() {},
     setOrder = function() {},
-    getMetaFormat = function() {},
-    setMetaFormat = function() {},
-    applyMetaFormat = function() {},
-    applyFormat = function() {},
+    applyRMetaFormat = function() {},
+    applyExternalMetaFormat = function() {},
+    applyRFormat = function() {},
+    applyExternalFormat = function() {},
     cacheOrder = function() {},
     applyOrder = function() {}
   )
@@ -221,7 +335,7 @@ IData <- R6Class(
 # Data ------------------------------------------------------------------
 
 #' @title
-#' Generic class for inheritance for format information
+#' Generic class for inheritance for unified data respresentations
 #'
 #' @description
 #' TODO
@@ -229,10 +343,26 @@ IData <- R6Class(
 #' @details
 #' TODO
 #'
-#' @field con \code{\link{ANY}}
-#'  Connection to a data source
-#' @field format \code{\link{list}}
-#'  Data information
+#' @field data \code{\link{ANY}}
+#'  Actual data
+#' @field r_meta_format \code{\link{IDataFormat}}
+#'  Instance of a class that implements the \code{\link[idata]{iDataFormat}}
+#'  interface and that contains meta format information for R.
+#' @field ext_meta_format \code{\link{IDataFormat}}
+#'  Instance of a class that implements the \code{\link[idata]{iDataFormat}}
+#'  interface and that contains meta format information for external data
+#'  location.
+#' @field r_format \code{\link{IDataFormat}}
+#'  Instance of a class that implements the \code{\link[idata]{iDataFormat}}
+#'  interface and that contains specific format information for R.
+#'  \strong{Not implemented/used yet}.
+#' @field ext_format \code{\link{IDataFormat}}
+#'  Instance of a class that implements the \code{\link[idata]{iDataFormat}}
+#'  interface and that contains meta specific format information for external
+#'  data locations.
+#'  \strong{Not implemented/used yet}.
+#' @field order \code{\link{ANY}}
+#'  Data order information (rows and columns currently).
 #'
 #' @section Getters/setters:
 #'
@@ -263,20 +393,27 @@ Data <- R6Class(
   public = list(
     ## Fields //
     data = NULL,
-    format = list(),
-    meta_format = list(),
+    r_meta_format = "IDataFormat",
+    ext_meta_format = "IDataFormat",
+    r_format = "IDataFormat",
+    ext_format = "IDataFormat",
+
     order = list(),
 
     ## Methods //
     initialize = function(
       data = data.frame(),
-      meta_format = list(),
-      format = list(),
+      r_meta_format = IDataFormat$new(),
+      ext_meta_format = IDataFormat$new(),
+      r_format = IDataFormat$new(),
+      ext_format = IDataFormat$new(),
       order = list()
     ) {
       self$data <- data
-      self$meta_format <- meta_format
-      self$format <- format
+      self$r_meta_format <- r_meta_format
+      self$ext_meta_format <- ext_meta_format
+      self$r_format <- r_format
+      self$ext_format <- ext_format
       self$order <- order
     },
     getData = function() {
@@ -285,17 +422,29 @@ Data <- R6Class(
     setData = function(value) {
       self$data <- value
     },
-    getMetaFormat = function() {
-      self$meta_format
+    getRMetaFormat = function() {
+      self$r_meta_format
     },
-    setMetaFormat = function(value) {
-      self$meta_format <- value
+    setRMetaFormat = function(value) {
+      self$r_meta_format <- value
     },
-    getFormat = function() {
-      self$format
+    getExternalMetaFormat = function() {
+      self$ext_meta_format
     },
-    setFormat = function(value) {
-      self$format <- value
+    setExternalMetaFormat = function(value) {
+      self$ext_meta_format <- value
+    },
+    getRFormat = function() {
+      self$r_format
+    },
+    setRFormat = function(value) {
+      self$r_format <- value
+    },
+    getExternalFormat = function() {
+      self$ext_format
+    },
+    setExternalFormat = function(value) {
+      self$ext_format <- value
     },
     getOrder = function() {
       self$order
@@ -303,10 +452,10 @@ Data <- R6Class(
     setOrder = function(value) {
       self$order <- value
     },
-    applyFormat = function(
+    applyRFormat = function(
       type = c("r", "ext")
     ) {
-      stop("Data: applyFormat: not implemented yet")
+      stop("Data: applyRFormat: not implemented yet")
       data <- self$data
       format <- self$meta_format
       type <- match.arg(type, c("r", "ext"))
@@ -327,18 +476,28 @@ Data <- R6Class(
         })
       }
     },
-    applyMetaFormat = function(
-      type = c("r", "ext")
-    ) {
-      data <- self$data
-      format <- self$meta_format
-      type <- match.arg(type, c("r", "ext"))
+    applyExternalFormat = function() {
+      stop("Data: applyExternalFormat: not implemented yet")
+    },
+    applyRMetaFormat = function() {
+      data <- self$getData()
+      format <- self$getRMetaFormat()$getFormat()
       if (length(format)) {
-        format <- format[[type]]
         for (handler in format) {
           data <- handler(data)
         }
-        self$data <- data
+        self$setData(data)
+      }
+      self$data
+    },
+    applyExternalMetaFormat = function() {
+      data <- self$getData()
+      format <- self$getExternalMetaFormat()$getFormat()
+      if (length(format)) {
+        for (handler in format) {
+          data <- handler(data)
+        }
+        self$setData(data)
       }
       self$data
     },

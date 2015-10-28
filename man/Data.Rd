@@ -3,8 +3,8 @@
 \docType{data}
 \name{Data}
 \alias{Data}
-\title{Generic class for inheritance for format information}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009ca6008> 
+\title{Generic class for inheritance for unified data respresentations}
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009c72270> 
  - attr(*, "name")= chr "Data_generator"
 }}
 \usage{
@@ -19,11 +19,31 @@ TODO
 \section{Fields}{
 
 \describe{
-\item{\code{con}}{\code{\link{ANY}}
-Connection to a data source}
+\item{\code{data}}{\code{\link{ANY}}
+Actual data}
 
-\item{\code{format}}{\code{\link{list}}
- Data information}
+\item{\code{r_meta_format}}{\code{\link{IDataFormat}}
+Instance of a class that implements the \code{\link[idata]{iDataFormat}}
+interface and that contains meta format information for R.}
+
+\item{\code{ext_meta_format}}{\code{\link{IDataFormat}}
+Instance of a class that implements the \code{\link[idata]{iDataFormat}}
+interface and that contains meta format information for external data
+location.}
+
+\item{\code{r_format}}{\code{\link{IDataFormat}}
+Instance of a class that implements the \code{\link[idata]{iDataFormat}}
+interface and that contains specific format information for R.
+\strong{Not implemented/used yet}.}
+
+\item{\code{ext_format}}{\code{\link{IDataFormat}}
+Instance of a class that implements the \code{\link[idata]{iDataFormat}}
+interface and that contains meta specific format information for external
+data locations.
+\strong{Not implemented/used yet}.}
+
+\item{\code{order}}{\code{\link{ANY}}
+ Data order information (rows and columns currently).}
 }}
 \section{Getters/setters}{
 
@@ -63,8 +83,8 @@ data_ext <- data.frame(
 
 # Example meta format -----------------------------------------------------
 
-meta_format <- list(
-  r = list(
+r_meta_format <- DataFormat$new(
+  format = list(
     function(x, pattern = "\\\\d{4}-\\\\d{2}-\\\\d{2}") {
       tmp <- lapply(x, function(ii) {
         if (any(grepl(pattern, ii))) {
@@ -79,8 +99,10 @@ meta_format <- list(
       names(x) <- gsub("\\\\.", "_", names(x))
       x
     }
-  ),
-  ext = list(
+  )
+)
+ext_meta_format <- DataFormat$new(
+  format = list(
     function(x, pattern = "\\\\d{4}-\\\\d{2}-\\\\d{2}") {
       tmp <- lapply(x, function(ii) {
         if (any(grepl(pattern, ii))) {
@@ -100,9 +122,9 @@ meta_format <- list(
 
 # Apply R format  ---------------------------------------------------------
 
-inst <- Data$new(data = data_ext, meta_format = meta_format)
+inst <- Data$new(data = data_ext, r_meta_format = r_meta_format)
 data_before <- inst$getData()
-inst$applyMetaFormat(type = "r")
+inst$applyRMetaFormat()
 data_after <- inst$getData()
 
 ## Names comparison //
@@ -115,9 +137,10 @@ sapply(data_after, class)
 
 # Apply external format ---------------------------------------------------
 
-inst <- Data$new(data = data_r, meta_format = meta_format)
+Data$undebug("applyExternalMetaFormat")
+inst <- Data$new(data = data_r, ext_meta_format = ext_meta_format)
 data_before <- inst$getData()
-inst$applyMetaFormat(type = "ext")
+inst$applyExternalMetaFormat()
 data_after <- inst$getData()
 
 ## Names comparison //

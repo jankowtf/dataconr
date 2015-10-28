@@ -4,7 +4,7 @@
 \name{IDataCon}
 \alias{IDataCon}
 \title{Class that functions as an interface for data connections}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009cf4240> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009ce4950> 
  - attr(*, "name")= chr "IDataCon_generator"
 }}
 \usage{
@@ -13,10 +13,12 @@ IDataCon
 \description{
 Defines the interface for data connections.
 }
-\details{
-The terms \emph{interace} is used in a looser context than in more
+\section{Details on interface term}{
+
+The term \emph{interface} is used in a looser context than in more
 rigid OOP contexts such as \emph{C#} or the like
 }
+
 \section{Getters/setters}{
 
 
