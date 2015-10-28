@@ -111,7 +111,6 @@ DataCon <- R6Class(
 
     ## Methods //
     initialize = function(
-      ...,
       con = NULL,
       meta = list()
     ) {
@@ -141,6 +140,111 @@ DataCon <- R6Class(
     },
     push = function(...) {
       stop("DataCon: push: not implemented")
+    }
+  )
+)
+
+# IFormat -----------------------------------------------------------------
+
+#' @title
+#' Class that functions as an interface for format information
+#'
+#' @description
+#' Defines the interface for format information.
+#'
+#' @details
+#' The terms \emph{interace} is used in a looser context than in more
+#' rigid OOP contexts such as \emph{C#} or the like
+#'
+#' @section Getters/setters:
+#'
+#' \itemize{
+#'  \item{getFormat} {
+#'  }
+#'  \item{setFormat} {
+#'  }
+#' }
+#'
+#' @section Public methods:
+#'
+#' \itemize{
+#'  \item{initialize} {
+#'  }
+#' }
+#'
+#' @template authors
+#' @template references
+#' @example inst/examples/IFormat.R
+#'
+#' @import R6
+#' @export
+IFormat <- R6Class(
+  classname = "IFormat",
+  portable = TRUE,
+  public = list(
+    ## Methods //
+    getFormat = function(...) {},
+    setFormat = function(...) {}
+  )
+)
+
+# Format ------------------------------------------------------------------
+
+#' @title
+#' Generic class for inheritance for format information
+#'
+#' @description
+#' TODO
+#'
+#' @details
+#' TODO
+#'
+#' @field con \code{\link{ANY}}
+#'  Connection to a data source
+#' @field format \code{\link{list}}
+#'  Format information
+#'
+#' @section Getters/setters:
+#'
+#' \itemize{
+#'  \item{See superclass} {
+#'    \code{\link[idata]{IFormat}}
+#'  }
+#' }
+#'
+#' @section Public methods:
+#'
+#' \itemize{
+#'  \item{See interface} {
+#'    \code{\link[idata]{IFormat}}
+#'  }
+#' }
+#'
+#' @template authors
+#' @template references
+#' @example inst/examples/Format.R
+#'
+#' @import R6
+#' @export
+Format <- R6Class(
+  classname = "Format",
+  inherit = IFormat,
+  portable = TRUE,
+  public = list(
+    ## Fields //
+    format = list(),
+
+    ## Methods //
+    initialize = function(
+      format = list()
+    ) {
+      self$format <- format
+    },
+    getFormat = function() {
+      self$format
+    },
+    setFormat = function(value) {
+      self$format <- value
     }
   )
 )

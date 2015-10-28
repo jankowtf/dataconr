@@ -6,7 +6,6 @@ test_that("DataCon::plain", {
 })
 
 test_that("DataCon::initialize", {
-  expect_is(res <- DataCon$new(con = NA,
-    hello_world = "hello world!"), "DataCon")
+  expect_is(res <- DataCon$new(con = NA), "DataCon")
   expect_true(inherits(res, "IDataCon"))
 })
