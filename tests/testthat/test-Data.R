@@ -12,14 +12,10 @@ test_that("Data: instantiate: values", {
   format_dummy <- DataFormat$new()
   inst <- Data$new(
     data = data.frame(letters),
-    r_format = format_dummy,
-    ext_format = format_dummy,
     r_meta_format = format_dummy,
     ext_meta_format = format_dummy
   )
   expect_identical(inst$data, data.frame(letters))
-  expect_identical(inst$r_format, format_dummy)
-  expect_identical(inst$ext_format, format_dummy)
   expect_identical(inst$r_meta_format, format_dummy)
   expect_identical(inst$ext_meta_format, format_dummy)
 })
@@ -36,50 +32,6 @@ test_that("Data: apply R format", {
     x_3 = TRUE
   )
 
-  format <- list(
-    x_1 = list(
-      name_r = "x_1",
-      name_r_handler = function(x) gsub("\\.", "_", x),
-      class_r = "integer",
-      class_r_handler = function(x) as.integer(x),
-      position_r = 1,
-      position_r_handler = NULL,
-      name_ext = NULL,
-      name_ext_handler = function(x) gsub("_", ".", x),
-      class_ext = NULL,
-      class_ext_handler = function(x) as.integer(x),
-      position_ext = 1,
-      position_ext_handler = NULL
-    ),
-    x_2 = list(
-      name_r = "x_2",
-      name_r_handler = function(x) gsub("\\.", "_", x),
-      class_r = "POSIXlt",
-      class_r_handler = function(x) as.POSIXlt(x),
-      position_r = 2,
-      position_r_handler = NULL,
-      name_ext = NULL,
-      name_ext_handler = function(x) gsub("_", ".", x),
-      class_ext = "character",
-      class_ext_handler = function(x) as.character(x),
-      position_ext = 2,
-      position_ext_handler = NULL
-    ),
-    x_3 = list(
-      name_r = "x_3",
-      name_r_handler = function(x) gsub("\\.", "_", x),
-      class_r = "logical",
-      class_r_handler = function(x) as.logical(x),
-      position_r = 3,
-      position_r_handler = NULL,
-      name_ext = NULL,
-      name_ext_handler = function(x) gsub("_", ".", x),
-      class_ext = "integer",
-      class_ext_handler = function(x) as.integer(x),
-      position_ext = 3,
-      position_ext_handler = NULL
-    )
-  )
   Data$debug("applyRFormat")
   inst <- Data$new(data = data, r_format = r_format)
   inst$applyFormat(type = "r")
@@ -156,21 +108,35 @@ test_that("Data: apply meta format", {
   expect_true(inherits(inst$data$x.2, "character"))
 })
 
-# Order -------------------------------------------------------------------
+# Structure -------------------------------------------------------------------
 
-context("Data: cache order")
+context("Data: cache structure")
 
 test_that("Data: cache order", {
   data_r <- data.frame(
     x_1 = seq(10, 20, 5),
     x_2 = seq(as.POSIXct("2015-01-01"), length.out = 3, by = "1 days"),
-    x_3 = TRUE
+    x_3 = TRUE,
+    stringsAsFactors = FALSE
   )
+# struc <- str(data_r)
+# structure(data_r)
+# eval(parse(text = deparse(data_r)))
 
+  ## R structure //
   inst <- Data$new(data = data_r)
-  expect_identical(inst$order, list())
-  expect_is(res <- inst$cacheOrder(), "list")
-  expect_identical(inst$order, list(
+  expect_identical(inst$r_structure, list())
+  expect_is(res <- inst$cacheRStructure(), "list")
+  expect_identical(inst$r_structure, list(
+    rows = c("1", "2", "3"),
+    columns = c("x_1", "x_2", "x_3")
+  ))
+
+  ## External structure //
+  inst <- Data$new(data = data_r)
+  expect_identical(inst$ext_structure, list())
+  expect_is(res <- inst$cacheExternalStructure(), "list")
+  expect_identical(inst$ext_structure, list(
     rows = c("1", "2", "3"),
     columns = c("x_1", "x_2", "x_3")
   ))
@@ -186,25 +152,25 @@ test_that("Data: apply order", {
   )
 
   inst <- Data$new(data = data_r)
-  inst$cacheOrder()
+  inst$cacheRStructure()
   idx_r <- c("3", "1", "2")
   idx_c <- c("x_3", "x_1", "x_2")
 
   ## Scope = columns (default) //
   inst$data <- inst$data[idx_r , idx_c]
-  expect_is(inst$applyOrder(), "data.frame")
+  expect_is(inst$applyRStructure(), "data.frame")
   expect_identical(inst$getData(), data_r[idx_r, ])
   inst$data <- inst$data[idx_r , idx_c]
-  expect_is(inst$applyOrder("columns"), "data.frame")
+  expect_is(inst$applyRStructure("columns"), "data.frame")
   expect_identical(inst$getData(), data_r[idx_r, ])
 
   ## Scope = rows //
   inst$data <- inst$data[idx_r , idx_c]
-  expect_is(inst$applyOrder("rows"), "data.frame")
+  expect_is(inst$applyRStructure("rows"), "data.frame")
   expect_identical(inst$getData(), data_r[, idx_c])
 
   ## Scope = both //
   inst$data <- inst$data[idx_r , idx_c]
-  expect_is(inst$applyOrder("both"), "data.frame")
+  expect_is(inst$applyRStructure("both"), "data.frame")
   expect_identical(inst$getData(), data_r)
 })

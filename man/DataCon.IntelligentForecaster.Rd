@@ -4,7 +4,7 @@
 \name{DataCon.IntelligentForecaster}
 \alias{DataCon.IntelligentForecaster}
 \title{Connector for Intelligent Forecaster}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009bf7528> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009bd1f30> 
  - attr(*, "name")= chr "DataCon.IntelligentForecaster_generator"
 }}
 \usage{

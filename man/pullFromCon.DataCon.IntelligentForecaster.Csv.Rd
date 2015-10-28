@@ -2,7 +2,7 @@
 % Please edit documentation in R/DataCon.IntelligentForecaster.R
 \name{pullFromCon.DataCon.IntelligentForecaster.Csv}
 \alias{pullFromCon.DataCon.IntelligentForecaster.Csv}
-\title{Pull from a connection}
+\title{Pull from DataCon.IntelligentForecaster.Csv data connection}
 \usage{
 \method{pullFromCon}{DataCon.IntelligentForecaster.Csv}(con)
 }

@@ -42,7 +42,7 @@ DataCon.IntelligentForecaster <- R6Class(
   public = list(
     ## Fields //
     con = character(),
-    cached = data.frame(),
+    cached = "IData",
     meta = list(),
 
     ## Methods //
@@ -100,7 +100,7 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
   public = list(
     ## Fields //
     con = character(),
-    cached = data.frame(),
+    cached = "IData",
     meta = list(),
 
     ## Methods //
@@ -108,9 +108,7 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
       ...,
       meta = list(
         ## Format //
-        toRFormat = list(
-          date_col = "date",
-          date_format = "%m/%d/%Y %H:%M:%S",
+        applyRFormat = list(
           extended = FALSE,
           with_ids = FALSE
         ),
@@ -118,7 +116,6 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
         ## Pull //
         pull = list(
           format = TRUE,
-          cache = TRUE,
           overwrite = FALSE
         )
       )
@@ -126,46 +123,53 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
       super$initialize(...)
       self$meta <- meta
     },
-    toExternalFormat = function(...) {
+    applyExternalFormat = function(...) {
       ## TODO 2015-10-19: implement advanced csv writer
-      self$cached
-      # TRUE
+      self$getCached()$getData()
     },
-    toRFormat = function(
-      date_col = self$meta$toRFormat$date_col,
-      date_format = self$meta$toRFormat$date_format,
-      extended = self$meta$toRFormat$extended,
-      with_ids = self$meta$toRFormat$with_ids,
+    applyRFormat = function(
+      extended = self$meta$applyRFormat$extended,
+      with_ids = self$meta$applyRFormat$with_ids,
       ...
     ) {
-      ## TODO 2015-10-26: implement private options
-      toRFormat(
+      data <- applyRFormat(
         con = self,
-        data_col = date_col,
-        date_format = date_format,
         extended = extended,
         with_ids = with_ids,
         ...
       )
+      self$getCached()$setData(data)
     },
     pull = function(
       format = self$meta$pull$format,
-      cache = self$meta$pull$cache,
       overwrite = self$meta$pull$overwrite,
       ...
     ) {
-      data <- pullFromCon(con = self)
-      if (cache) {
-        self$cached <- data
-      }
-      if (format) {
-        # data <- toRFormat(con = self, ...)
-        data <- self$toRFormat(...)
-        if (cache) {
-          self$cached <- data
+      if (!length(self$getCached()$getData()) || overwrite) {
+        ## Retrieve //
+        data <- pullFromCon(con = self)
+
+        ## Cache //
+        self$getCached()$setData(data)
+        self$getCached()$cacheExternalStructure()
+        # self$getCached()$getExternalStructure()
+
+        ## Inject //
+        self$getCached()$setInjected(self)
+
+        ## Format //
+        if (format) {
+          # self$meta$applyRFormat$extended <- TRUE
+  #         self$getCached()$getInjected()$meta$applyRFormat$extended
+          self$getCached()$applyRFormat(...)
+          self$getCached()$applyRMetaFormat()
+          self$getCached()$cacheRStructure()
         }
+      } else {
+        warning(sprintf("%s: pull: cached data exists (no overwrite)",
+          class(self)[1]))
       }
-      data
+      self$getCached()$getData()
     },
     push = function(
 
@@ -178,18 +182,18 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
       value
     ) {
       if (missing(value)) {
-        if (!length(self$cached)) {
+        if (!length(self$getCached()$getData())) {
           self$pull()
         }
       } else {
-        self$cached <- value
+        self$getCached()$setData(value)
       }
-      self$cached
+      self$getCached()$getData()
     }
   )
 )
 
-# toRFormat.DataCon.IntelligentForecaster.Csv ----------------------------------
+# applyRFormat.DataCon.IntelligentForecaster.Csv ----------------------------------
 
 #' @title
 #' Format to R format
@@ -203,21 +207,30 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
 #'
 #' @param con \code{\link[idata]{DataCon.IntelligentForecaster.Csv}}.
 #' @return Formated \code{\link[base]{data.frame}}.
-#' @example inst/examples/example-toRFormat.R
+#' @example inst/examples/example-applyRFormat.R
 #' @export
-toRFormat.DataCon.IntelligentForecaster.Csv <- function(
+applyRFormat.DataCon.IntelligentForecaster.Csv <- function(
   con,
-  date_col = "date",
-  date_format = "%m/%d/%Y %H:%M:%S",
   extended = FALSE,
   with_ids = FALSE,
-  format_list = list(),
   ...
 ) {
-  data <- con$cached
+  data <- con$getCached()$getData()
+
   if (!length(data)) {
-    stop("toRFormat.DataCon.IntelligentForecaster.Csv: no data available")
+    stop("applyRFormat.DataCon.IntelligentForecaster.Csv: no data available")
   }
+
+  ## Meta arguments //
+  date_col = "date"
+  date_format = "%m/%d/%Y %H:%M:%S"
+  ## TODO 2015-10-28: possibly make those accessible via arguments or options
+
+  ## Names //
+  nms <- tolower(names(data))
+  nms <- gsub("^moment$", "date", nms)
+  names(data) <- nms
+
   date_format_fallback <- "%d.%m.%Y %H:%M:%S"
   datevec <- data[ , date_col]
   posix <- as.POSIXlt(datevec, format = date_format)
@@ -228,7 +241,7 @@ toRFormat.DataCon.IntelligentForecaster.Csv <- function(
     tmp <- as.character(posix)
   }
   if (all(is.na(tmp))) {
-    stop("toRFormat :: invalid date format")
+    stop("applyRFormat: invalid date format")
   }
 
   ## New date vector //
@@ -243,7 +256,11 @@ toRFormat.DataCon.IntelligentForecaster.Csv <- function(
   ## --> check back with HK on how to handle this
 
   if (extended) {
-    date_atoms <- getDateAtoms(data$date, with_ids = with_ids, include_date = TRUE)
+    date_atoms <- getDateAtoms(
+      data$date,
+      with_ids = with_ids,
+      include_date = TRUE
+    )
 
     ## Match to make absolutely sure that order is correct //
     idx <- match(data$date, date_atoms$date)
@@ -254,11 +271,9 @@ toRFormat.DataCon.IntelligentForecaster.Csv <- function(
     data <- cbind(data, date_atoms_2)
   }
 
-  # print(data[data$date_day == "2012-12-24", ])
-
   idx_na <- is.na(colnames(data))
   data <- data[ , !idx_na]
-  idx <- grep("^id$|^date", colnames(data))
+  idx <- grep("^id$|^date$|^value$", colnames(data))
   idx <- c(idx, setdiff(1:ncol(data), idx))
 
   data <- data[ , idx]
@@ -266,20 +281,13 @@ toRFormat.DataCon.IntelligentForecaster.Csv <- function(
   ## Ensuring correct decimal separator //
   data$value <- as.numeric(gsub(",", ".", data$value))
 
-  ## Saving meta information //
-  if (length(format_this <- format_list$columns)) {
-    con$meta$toRFormat$columns <- format_this
-  } else {
-    con$meta$toRFormat$columns <- names(data)
-  }
-
   data
 }
 
-# DataCon.IntelligentForecaster.Csv ---------------------------------------
+# pullFromCon -------------------------------------------------------------
 
 #' @title
-#' Pull from a connection
+#' Pull from DataCon.IntelligentForecaster.Csv data connection
 #'
 #' @description
 #' Pulls data from a connection object of class
@@ -298,11 +306,16 @@ pullFromCon.DataCon.IntelligentForecaster.Csv <- function(
   path <- con$con
   data <- read.csv2(path, sep = ";", dec = ",", header = FALSE,
     stringsAsFactors = FALSE)[-1, ]
+#   data <- read.csv2(path, sep = ";", dec = ",", header = FALSE,
+#     stringsAsFactors = FALSE)
   # head(data)
   # nrow(data)
-  nms <- tolower(as.character(data[1, ]))
-  nms <- gsub("^moment$", "date", nms)
+  # nms <- tolower(as.character(data[1, ]))
+  nms <- as.character(data[1, ])
+  # nms <- gsub("^moment$", "date", nms)
   data <- data[-1, ]
   names(data) <- nms
+  row.names(data) <- NULL
+
   data
 }

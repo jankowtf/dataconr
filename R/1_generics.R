@@ -9,10 +9,10 @@
 #'
 #' @param con A connection object
 #' @return See respective methods.
-#' @example inst/examples/example-toRFormat.R
+#' @example inst/examples/example-applyRFormat.R
 #' @export
-toRFormat <- function(con, ...) {
-  UseMethod("toRFormat", con)
+applyRFormat <- function(con, ...) {
+  UseMethod("applyRFormat", con)
 }
 
 #' @title
@@ -26,10 +26,10 @@ toRFormat <- function(con, ...) {
 #'
 #' @param con A connection object
 #' @return See respective methods.
-#' @example inst/examples/example-toExternalFormat.R
+#' @example inst/examples/example-applyExternalFormat.R
 #' @export
-toExternalFormat <- function(con) {
-  UseMethod("toExternalFormat", con)
+applyExternalFormat <- function(con) {
+  UseMethod("applyExternalFormat", con)
 }
 
 #' @title

@@ -36,7 +36,7 @@ DataCon.Neo4j <- R6Class(
   public = list(
     ## Fields //
     con = "graph",
-    cached = data.frame(),
+    cached = "IData",
 
     ## Methods //
     initialize = function(
@@ -44,17 +44,15 @@ DataCon.Neo4j <- R6Class(
     ) {
       super$initialize(...)
     },
-    toExternalFormat = function(
-      con,
+    applyExternalFormat = function(
       ...
     ) {
-      toExternalFormat(con = self, ...)
+      applyExternalFormat(con = self, ...)
     },
-    toRFormat = function(
-      con,
+    applyRFormat = function(
       ...
     ) {
-      toRFormat(con = self, ...)
+      applyRFormat(con = self, ...)
     },
     pull = function(...) {
       stop("DataCon.Neo4j: pull: not implemented yet ")
@@ -67,7 +65,7 @@ DataCon.Neo4j <- R6Class(
   )
 )
 
-# toRFormat.DataCon.Neo4j -------------------------------------------------
+# applyRFormat.DataCon.Neo4j -------------------------------------------------
 
 #' @title
 #' Format to R format
@@ -81,13 +79,12 @@ DataCon.Neo4j <- R6Class(
 #'
 #' @param con \code{\link[idata]{DataCon.Neo4j}}.
 #' @return Formated \code{\link[base]{data.frame}}.
-#' @example inst/examples/example-toRFormat.R
+#' @example inst/examples/example-applyRFormat.R
 #' @export
-toRFormat.DataCon.Neo4j <- function(
-  con,
-  format_list = list()
+applyRFormat.DataCon.Neo4j <- function(
+  con
 ) {
-  data <- con$cached
+  data <- con$getCached()$getData()
   ## TODO 2015-1015: implement mechanism for rule sets
   rules <- list()
   rules$rapid <- list(
@@ -116,18 +113,14 @@ toRFormat.DataCon.Neo4j <- function(
   }
 
   ## Meta information //
-  if (length(format_this <- format_list$columns)) {
-    con$meta$toRFormat$columns <- format_this
-  }
-  if (length(idx <- con$meta$toRFormat$columns)) {
-    data_2 <- data_2[ , idx]
+  if (length(idx <- con$getCached()$getRStructure())) {
+    data_2 <- data_2[ , idx$columns]
   }
 
   data_2
 }
 
-
-# toExternalFormat.DataCon.Neo4j ------------------------------------------
+# applyExternalFormat.DataCon.Neo4j ------------------------------------------
 
 #' @title
 #' Format to external format
@@ -141,13 +134,12 @@ toRFormat.DataCon.Neo4j <- function(
 #'
 #' @param con \code{\link[idata]{DataCon.Neo4j}}.
 #' @return Formated \code{\link[base]{data.frame}}.
-#' @example inst/examples/example-toExternalFormat.R
+#' @example inst/examples/example-applyExternalFormat.R
 #' @export
-toExternalFormat.DataCon.Neo4j <- function(
-  con,
-  format_list = list()
+applyExternalFormat.DataCon.Neo4j <- function(
+  con
 ) {
-  data <- con$cached
+  data <- con$getCached()$getData()
   ## TODO 2015-1015: implement mechanism for rule sets
   rules <- list()
   rules$classes_invalid <- c(

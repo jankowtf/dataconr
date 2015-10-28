@@ -1,5 +1,5 @@
 library(RNeo4j)
-filepath <- "csv_1_small.csv"
+filepath <- "csv_1_small_25.csv"
 
 context("DataCon.Neo4j")
 
@@ -16,29 +16,35 @@ test_that("DataCon.Neo4j::initialize", {
   expect_true(inherits(res$con, "graph"))
 })
 
-# toExternalFormat --------------------------------------------------
+# applyExternalFormat --------------------------------------------------
 
-test_that("DataCon.Neo4j: toExternalFormat", {
-  inst <- DataCon.Neo4j$new()
-  data <- data.frame(
-    date = seq(as.POSIXlt("2015-01-01"), length.out = 3, by = "1 days"),
-    value = 1:3
+test_that("DataCon.Neo4j: applyExternalFormat", {
+  target <- Data$new(
+    data = data.frame(
+      date = seq(as.POSIXlt("2015-01-01"), length.out = 3, by = "1 days"),
+      value = 1:3
+    )
   )
-  inst$setCached(data)
-  expect_is(res <- inst$toExternalFormat(), class(data))
+  # inst$setCached(target)
+  inst <- DataCon.Neo4j$new(cached = target)
+
+  # inst$getCached()
+  expect_is(res <- inst$applyExternalFormat(), class(target$getData()))
   expect_is(res$date, "character")
 })
 
-# toRFormat -----------------------------------------------------------
+# applyRFormat -----------------------------------------------------------
 
-test_that("DataCon.Neo4j: toRFormat", {
+test_that("DataCon.Neo4j: applyRFormat", {
   inst <- DataCon.Neo4j$new()
-  data <- data.frame(
-    date = as.character(seq(as.POSIXlt("2015-01-01"), length.out = 3, by = "1 days")),
-    value = 1:3
+  target <- Data$new(
+    data = data.frame(
+      date = as.character(seq(as.POSIXlt("2015-01-01"), length.out = 3, by = "1 days")),
+      value = 1:3
+    )
   )
-  inst$setCached(data)
-  expect_is(res <- inst$toRFormat(), class(data))
+  inst$setCached(target)
+  expect_is(res <- inst$applyRFormat(), class(target$getData()))
   expect_is(res$date, "POSIXlt")
 })
 
@@ -46,17 +52,25 @@ test_that("DataCon.Neo4j: toRFormat", {
 
 test_that("DataCon.IntelligentForecaster.Csv + DataCon.Neo4j: meta: column order", {
   path <- withCorrectWorkingDir(
-    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv", filepath)
+    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv",
+      filepath)
   )
   expect_true(file.exists(path))
-  inst <- DataCon.IntelligentForecaster.Csv$new(con = path)
+  inst <- DataCon.IntelligentForecaster.Csv$new(
+    con = path,
+    cached = Data$new()
+  )
   data <- inst$pull(extended = TRUE, with_ids = TRUE)
   # inst$meta
 
-  inst_2 <- DataCon.Neo4j$new(meta = inst$meta)
-  # inst_2$meta
-  inst_2$setCached(data)
-
-  expect_is(res <- inst$toRFormat(), class(inst$getCached()))
-  expect_identical(order(names(inst$getCached())), order(names(res)))
+  inst_2 <- DataCon.Neo4j$new(
+    meta = inst$meta,
+    cached = inst$getCached()
+  )
+  expect_identical(
+    inst$getCached()$getRStructure(),
+    inst_2$getCached()$getRStructure()
+  )
+  expect_is(res <- inst$applyRFormat(), class(inst$getCached()$getData()))
+  expect_identical(order(names(inst$getCached()$getData())), order(names(res)))
 })
