@@ -4,7 +4,7 @@
 \name{Data}
 \alias{Data}
 \title{Generic class for inheritance for unified data respresentations}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009c72270> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009c70b00> 
  - attr(*, "name")= chr "Data_generator"
 }}
 \usage{
@@ -23,21 +23,21 @@ TODO
 Actual data}
 
 \item{\code{r_meta_format}}{\code{\link{IDataFormat}}
-Instance of a class that implements the \code{\link[idata]{iDataFormat}}
+Instance of a class that implements the \code{\link[idata]{IDataFormat}}
 interface and that contains meta format information for R.}
 
 \item{\code{ext_meta_format}}{\code{\link{IDataFormat}}
-Instance of a class that implements the \code{\link[idata]{iDataFormat}}
+Instance of a class that implements the \code{\link[idata]{IDataFormat}}
 interface and that contains meta format information for external data
 location.}
 
 \item{\code{r_format}}{\code{\link{IDataFormat}}
-Instance of a class that implements the \code{\link[idata]{iDataFormat}}
+Instance of a class that implements the \code{\link[idata]{IDataFormat}}
 interface and that contains specific format information for R.
 \strong{Not implemented/used yet}.}
 
 \item{\code{ext_format}}{\code{\link{IDataFormat}}
-Instance of a class that implements the \code{\link[idata]{iDataFormat}}
+Instance of a class that implements the \code{\link[idata]{IDataFormat}}
 interface and that contains meta specific format information for external
 data locations.
 \strong{Not implemented/used yet}.}

@@ -4,7 +4,7 @@
 \name{IDataCon}
 \alias{IDataCon}
 \title{Class that functions as an interface for data connections}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009ce4950> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009ce31e0> 
  - attr(*, "name")= chr "IDataCon_generator"
 }}
 \usage{
@@ -24,12 +24,16 @@ rigid OOP contexts such as \emph{C#} or the like
 
 \itemize{
  \item{getCached} {
+   TODO
  }
  \item{getCachedActive} {
+   TODO
  }
  \item{setCached} {
+   TODO
  }
  \item{setCachedActive} {
+   TODO
  }
 }
 }
@@ -38,16 +42,26 @@ rigid OOP contexts such as \emph{C#} or the like
 
 
 \itemize{
- \item{initialize} {
- }
  \item{toExternalData} {
+   TODO
  }
  \item{toRData} {
+   TODO
  }
  \item{pull} {
+   TODO
  }
  \item{push} {
+   TODO
  }
+}
+}
+
+\section{Known interface implementations}{
+
+
+\itemize{
+ \item{\code{\link[idata]{DataCon}}}
 }
 }
 \examples{

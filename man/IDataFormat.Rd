@@ -4,7 +4,7 @@
 \name{IDataFormat}
 \alias{IDataFormat}
 \title{Class that functions as an interface for data format information}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009ca9a88> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009ca8318> 
  - attr(*, "name")= chr "IDataFormat_generator"
 }}
 \usage{
@@ -24,8 +24,10 @@ rigid OOP contexts such as \emph{C#} or the like
 
 \itemize{
  \item{getFormat} {
+   TODO
  }
  \item{setFormat} {
+   TODO
  }
 }
 }
@@ -35,6 +37,14 @@ rigid OOP contexts such as \emph{C#} or the like
 
 \itemize{
  TODO
+}
+}
+
+\section{Known interface implementations}{
+
+
+\itemize{
+ \item{\code{\link[idata]{DataFormat}}}
 }
 }
 \examples{

@@ -13,28 +13,40 @@
 #'
 #' \itemize{
 #'  \item{getCached} {
+#'    TODO
 #'  }
 #'  \item{getCachedActive} {
+#'    TODO
 #'  }
 #'  \item{setCached} {
+#'    TODO
 #'  }
 #'  \item{setCachedActive} {
+#'    TODO
 #'  }
 #' }
 #'
 #' @section Public methods:
 #'
 #' \itemize{
-#'  \item{initialize} {
-#'  }
 #'  \item{toExternalData} {
+#'    TODO
 #'  }
 #'  \item{toRData} {
+#'    TODO
 #'  }
 #'  \item{pull} {
+#'    TODO
 #'  }
 #'  \item{push} {
+#'    TODO
 #'  }
+#' }
+#'
+#' @section Known interface implementations:
+#'
+#' \itemize{
+#'  \item{\code{\link[idata]{DataCon}}}
 #' }
 #'
 #' @template authors
@@ -156,8 +168,10 @@ DataCon <- R6Class(
 #'
 #' \itemize{
 #'  \item{getFormat} {
+#'    TODO
 #'  }
 #'  \item{setFormat} {
+#'    TODO
 #'  }
 #' }
 #'
@@ -165,6 +179,12 @@ DataCon <- R6Class(
 #'
 #' \itemize{
 #'  TODO
+#' }
+#'
+#' @section Known interface implementations:
+#'
+#' \itemize{
+#'  \item{\code{\link[idata]{DataFormat}}}
 #' }
 #'
 #' @template authors
@@ -256,48 +276,70 @@ DataFormat <- R6Class(
 #'
 #' \itemize{
 #'  \item{getData} {
+#'    TODO
 #'  }
 #'  \item{setData} {
+#'    TODO
 #'  }
 #'  \item{getRFormat} {
+#'    TODO
 #'  }
 #'  \item{setRFormat} {
+#'    TODO
 #'  }
 #'  \item{getExternalFormat} {
+#'    TODO
 #'  }
 #'  \item{setExternalFormat} {
+#'    TODO
 #'  }
 #'  \item{getRMetaFormat} {
+#'    TODO
 #'  }
 #'  \item{setRMetaFormat} {
+#'    TODO
 #'  }
 #'  \item{getExternalMetaFormat} {
+#'    TODO
 #'  }
 #'  \item{setExternalMetaFormat} {
+#'    TODO
 #'  }
 #'  \item{getOrder} {
+#'    TODO
 #'  }
 #'  \item{setOrder} {
+#'    TODO
 #'  }
 #' }
 #'
 #' @section Public methods:
 #'
 #' \itemize{
-#'  \item{initialize} {
-#'  }
 #'  \item{applyRMetaFormat} {
+#'    TODO
 #'  }
 #'  \item{applyExternalMetaFormat} {
+#'    TODO
 #'  }
 #'  \item{applyRFormat} {
+#'    TODO
 #'  }
 #'  \item{applyExternalFormat} {
+#'    TODO
 #'  }
 #'  \item{cacheOrder} {
+#'    TODO
 #'  }
 #'  \item{applyOrder} {
+#'    TODO
 #'  }
+#' }
+#'
+#' @section Known interface implementations:
+#'
+#' \itemize{
+#'  \item{\code{\link[idata]{Data}}}
 #' }
 #'
 #' @template authors
@@ -346,18 +388,18 @@ IData <- R6Class(
 #' @field data \code{\link{ANY}}
 #'  Actual data
 #' @field r_meta_format \code{\link{IDataFormat}}
-#'  Instance of a class that implements the \code{\link[idata]{iDataFormat}}
+#'  Instance of a class that implements the \code{\link[idata]{IDataFormat}}
 #'  interface and that contains meta format information for R.
 #' @field ext_meta_format \code{\link{IDataFormat}}
-#'  Instance of a class that implements the \code{\link[idata]{iDataFormat}}
+#'  Instance of a class that implements the \code{\link[idata]{IDataFormat}}
 #'  interface and that contains meta format information for external data
 #'  location.
 #' @field r_format \code{\link{IDataFormat}}
-#'  Instance of a class that implements the \code{\link[idata]{iDataFormat}}
+#'  Instance of a class that implements the \code{\link[idata]{IDataFormat}}
 #'  interface and that contains specific format information for R.
 #'  \strong{Not implemented/used yet}.
 #' @field ext_format \code{\link{IDataFormat}}
-#'  Instance of a class that implements the \code{\link[idata]{iDataFormat}}
+#'  Instance of a class that implements the \code{\link[idata]{IDataFormat}}
 #'  interface and that contains meta specific format information for external
 #'  data locations.
 #'  \strong{Not implemented/used yet}.

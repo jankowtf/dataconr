@@ -4,7 +4,7 @@
 \name{DataCon}
 \alias{DataCon}
 \title{Generic class for inheritance for data connections}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009cbcc60> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009cbb4f0> 
  - attr(*, "name")= chr "DataCon_generator"
 }}
 \usage{
