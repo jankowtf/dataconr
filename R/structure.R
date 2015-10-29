@@ -37,7 +37,7 @@ getStructure <- function(inst, ...) {
 getStructure.data.frame <- function(inst) {
   value <- attributes(inst)
   value$row.names <- as.character(value$row.names)
-  structure(value, class = c("Structure.DataFrame", class(value)))
+  structure(value, class = c("Structure.DataFrame", "Structure", class(value)))
 }
 
 # getStructure.list -------------------------------------------------------
@@ -58,7 +58,7 @@ getStructure.data.frame <- function(inst) {
 #' @export
 getStructure.list <- function(inst) {
   value <- attributes(inst)
-  structure(value, class = c("Structure.List", class(value)))
+  structure(value, class = c("Structure.List", "Structure", class(value)))
 }
 
 # getStructure.character --------------------------------------------------
@@ -79,7 +79,73 @@ getStructure.list <- function(inst) {
 #' @export
 getStructure.character <- function(inst) {
   value <- list(names = names(inst), length = length(inst))
-  structure(value, class = c("Structure.Character", class(value)))
+  structure(value, class = c("Structure.Character", "Structure", class(value)))
+}
+
+# handleSetStructure ------------------------------------------------------
+
+#' @title
+#' Handler for setting structure information
+#'
+#' @description
+#' Designed for usage with implementations of the
+#' \code{\link[idata]{IDataFormat}} interface and method
+#' \code{\link[idata]{IDataFormat$setStructure}}
+#'
+#' @details
+#' TODO
+#'
+#' @param inst A class instance.
+#' @return See respective methods.
+#' @example inst/examples/example-handleSetStructure.R
+#' @export
+handleSetStructure <- function(inst, ...) {
+  UseMethod("handleSetStructure", inst)
+}
+
+# handleSetStructure.default ----------------------------------------------
+
+#' @title
+#' Handler for setting structure information
+#'
+#' @description
+#' See generic: \code{\link[idata]{handleSetStructure}}
+#' Method for: \code{\link[base]{ANY}}
+#'
+#' @details
+#' TODO
+#'
+#' @param inst \code{\link[base]{ANY}}.
+#' @return \code{\link[base]{Structure}}. Return value of
+#'  \code{\link[idata]{getStructure}}.
+#' @example inst/examples/example-handleSetStructure.R
+#' @export
+handleSetStructure.default = function(
+  inst
+) {
+  getStructure(inst)
+}
+
+# handleSetStructure.Structure --------------------------------------------
+
+#' @title
+#' Handler for setting structure information
+#'
+#' @description
+#' See generic: \code{\link[idata]{handleSetStructure}}
+#' Method for: \code{\link[base]{Structure}}
+#'
+#' @details
+#' TODO
+#'
+#' @param inst \code{\link[base]{Structure}}.
+#' @return \code{\link[base]{Structure}}. Just returns input.
+#' @example inst/examples/example-handleSetStructure.R
+#' @export
+handleSetStructure.Structure = function(
+  inst
+) {
+  inst
 }
 
 # applyStructure ----------------------------------------------------------
