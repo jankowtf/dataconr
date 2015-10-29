@@ -4,7 +4,7 @@
 \name{IDataFormat}
 \alias{IDataFormat}
 \title{Class that functions as an interface for data format information}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009ca9820> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009c801b0> 
  - attr(*, "name")= chr "IDataFormat_generator"
 }}
 \usage{

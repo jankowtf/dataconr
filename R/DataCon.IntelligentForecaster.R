@@ -190,20 +190,20 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
       methodNotImplemented(self)
     }
   ),
-  active = list(
-    cached_active = function(
-      value
-    ) {
-      if (missing(value)) {
-        if (!length(self$getCached()$getData())) {
-          self$pull()
-        }
-      } else {
-        self$getCached()$setData(value)
-      }
-      self$getCached()$getData()
-    }
-  ),
+#   active = list(
+#     cached_active = function(
+#       value
+#     ) {
+#       if (missing(value)) {
+#         if (!length(self$getCached()$getData())) {
+#           self$pull()
+#         }
+#       } else {
+#         self$getCached()$setData(value)
+#       }
+#       self$getCached()$getData()
+#     }
+#   ),
   private = list(
     factories = list(
       production = function() {

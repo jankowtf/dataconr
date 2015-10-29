@@ -203,13 +203,19 @@ IData <- R6Class(
 #'  \item{getCached} {
 #'    TODO
 #'  }
-#'  \item{getCachedActive} {
-#'    TODO
-#'  }
 #'  \item{setCached} {
 #'    TODO
 #'  }
+#'  \item{getCachedActive} {
+#'    TODO
+#'  }
 #'  \item{setCachedActive} {
+#'    TODO
+#'  }
+#'  \item{getConnection} {
+#'    TODO
+#'  }
+#'  \item{setConnection} {
 #'    TODO
 #'  }
 #' }
@@ -237,6 +243,7 @@ IData <- R6Class(
 #'  \item{\code{\link[idata]{DataCon}}}
 #'  \item{\code{\link[idata]{DataCon.IntelligentForecaster}}}
 #'  \item{\code{\link[idata]{DataCon.IntelligentForecaster.Csv}}}
+#'  \item{\code{\link[idata]{DataCon.Neo4j}}}
 #' }
 #'
 #' @template authors
@@ -258,13 +265,19 @@ IDataCon <- R6Class(
     getCached = function(...) {
       stopOnInterfaceCall(self)
     },
-    getCachedActive = function(...) {
-      stopOnInterfaceCall(self)
-    },
     setCached = function(...) {
       stopOnInterfaceCall(self)
     },
+    getCachedActive = function(...) {
+      stopOnInterfaceCall(self)
+    },
     setCachedActive = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    getConnection = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    setConnection = function(...) {
       stopOnInterfaceCall(self)
     },
     pull = function(...) {

@@ -304,14 +304,20 @@ DataCon <- R6Class(
     getCached = function() {
       self$cached
     },
-    getCachedActive = function() {
-      self$cached_active
-    },
     setCached = function(value) {
       self$cached <- value
     },
+    getCachedActive = function() {
+      self$cached_active
+    },
     setCachedActive = function(value) {
       self$cached_active <- value
+    },
+    getConnection = function() {
+      self$con
+    },
+    setConnection = function(value) {
+      self$con <- value
     },
     pull = function(...) {
       methodNotImplemented(self)
@@ -319,5 +325,43 @@ DataCon <- R6Class(
     push = function(...) {
       methodNotImplemented(self)
     }
+  ),
+  active = list(
+    cached_active = function(
+      value
+    ) {
+      if (missing(value)) {
+        if (!length(self$getCached()$getData())) {
+          self$pull()
+        }
+      } else {
+        self$getCached()$setData(value)
+      }
+      self$getCached()$getData()
+    }
+  ),
+  private = list(
+    factories = list(
+      production = function() {
+        DataCon$new(
+          cached = Data$new(
+            r_format = DataFormat$new(),
+            ext_format = DataFormat$new()
+          )
+        )
+      },
+      test = function(
+        con
+      ) {
+        DataCon$new(
+          con = con,
+          cached = Data$new(
+            r_format = DataFormat$new(),
+            ext_format = DataFormat$new()
+          )
+        )
+      }
+    )
   )
 )
+DataCon$factories <- DataCon$private_fields$factories

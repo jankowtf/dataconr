@@ -4,7 +4,7 @@
 \name{IDataCon}
 \alias{IDataCon}
 \title{Class that functions as an interface for data connections}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009c32c70> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009c1d550> 
  - attr(*, "name")= chr "IDataCon_generator"
 }}
 \usage{
@@ -26,13 +26,19 @@ rigid OOP contexts such as \emph{C#} or the like
  \item{getCached} {
    TODO
  }
- \item{getCachedActive} {
-   TODO
- }
  \item{setCached} {
    TODO
  }
+ \item{getCachedActive} {
+   TODO
+ }
  \item{setCachedActive} {
+   TODO
+ }
+ \item{getConnection} {
+   TODO
+ }
+ \item{setConnection} {
    TODO
  }
 }
@@ -64,6 +70,7 @@ rigid OOP contexts such as \emph{C#} or the like
  \item{\code{\link[idata]{DataCon}}}
  \item{\code{\link[idata]{DataCon.IntelligentForecaster}}}
  \item{\code{\link[idata]{DataCon.IntelligentForecaster.Csv}}}
+ \item{\code{\link[idata]{DataCon.Neo4j}}}
 }
 }
 \examples{

@@ -4,7 +4,7 @@
 \name{Data}
 \alias{Data}
 \title{Superclass for unified data respresentations}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009be84e8> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009bc9a30> 
  - attr(*, "name")= chr "Data_generator"
 }}
 \usage{
