@@ -2,9 +2,9 @@ library(reltest)
 file_small_1000 <- "csv_1_small_1000.csv"
 file_small_25 <- "csv_1_small_25.csv"
 
-context("DataCon.IntelligentForecaster.Csv")
-
 # Instantiate -------------------------------------------------------------
+
+context("DataCon.IntelligentForecaster.Csv: instantiate")
 
 test_that("DataCon.IntelligentForecaster.Csv: empty", {
   expect_is(inst <- DataCon.IntelligentForecaster.Csv$new(),
@@ -20,24 +20,55 @@ test_that("DataCon.IntelligentForecaster.Csv: values", {
   expect_true(inherits(inst$con, "character"))
 })
 
-# Getters -----------------------------------------------------------------
+# Factory -----------------------------------------------------------------
+
+context("DataCon.IntelligentForecaster.Csv: factory")
+
+test_that("DataCon.IntelligentForecaster.Csv: factory: production", {
+  expect_is(
+    inst <- DataCon.IntelligentForecaster.Csv$factories$production(),
+    "DataCon.IntelligentForecaster.Csv"
+  )
+  expect_true(inherits(inst$getCached(), "Data"))
+  expect_true(inherits(inst$getCached()$getRFormat(), "DataFormat"))
+  expect_true(inherits(inst$getCached()$getExternalFormat(), "DataFormat"))
+})
+
+test_that("DataCon.IntelligentForecaster.Csv: factory: test", {
+  con <- withCorrectWorkingDir(
+    file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv",
+      file_small_25)
+  )
+  expect_is(
+    inst <- DataCon.IntelligentForecaster.Csv$factories$test(con = con),
+    "DataCon.IntelligentForecaster.Csv"
+  )
+  expect_true(inherits(inst$getCached(), "Data"))
+  expect_true(inherits(inst$getCached()$getRFormat(), "DataFormat"))
+  expect_true(inherits(inst$getCached()$getExternalFormat(), "DataFormat"))
+})
+
+# Getters/setters ----------------------------------------------------------
+
+context("DataCon.IntelligentForecaster.Csv: getters/setters")
 
 test_that("DataCon.IntelligentForecaster.Csv: getter/setter", {
-  path <- withCorrectWorkingDir(
+  con <- withCorrectWorkingDir(
     file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv",
       file_small_1000)
   )
-  expect_true(file.exists(path))
+  expect_true(file.exists(con))
+
   inst <- DataCon.IntelligentForecaster.Csv$new(
-    con = path
+    con = con
   )
   expect_equivalent(inst$getCached(), IData$new())
 
-  inst <- DataCon.IntelligentForecaster.Csv$new(
-    con = path,
-    cached = Data$new()
-  )
-  expect_true(inherits(res <- inst$getCachedActive(), "data.frame"))
+  expect_error(res <- inst$getCachedActive(),
+    ".* you called the interface")
+
+  inst <- DataCon.IntelligentForecaster.Csv$factories$test(con = con)
+  expect_is(res <- inst$getCachedActive(), "data.frame")
 })
 
 # Setters -----------------------------------------------------------------
@@ -53,18 +84,15 @@ test_that("DataCon.IntelligentForecaster.Csv: getter/setter", {
 
 test_that("DataCon.IntelligentForecaster.Csv: pull(format = FALSE)", {
   inst <- DataCon.IntelligentForecaster.Csv$new()
-  expect_error(res <- inst$pull(), "must be a character string or connection")
+  expect_error(res <- inst$pull(), ".* you called the interface")
 
-  path <- withCorrectWorkingDir(
+  con <- withCorrectWorkingDir(
     file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv",
       file_small_25)
   )
-  expect_true(file.exists(path))
+  expect_true(file.exists(con))
   # DataCon.IntelligentForecaster.Csv$debug("pull")
-  inst <- DataCon.IntelligentForecaster.Csv$new(
-    con = path,
-    cached = Data$new()
-  )
+  inst <- DataCon.IntelligentForecaster.Csv$factories$test(con = con)
   expect_is(res <- inst$pull(format = FALSE), "data.frame")
 
   expect_true(nrow(res) > 0)
@@ -72,30 +100,26 @@ test_that("DataCon.IntelligentForecaster.Csv: pull(format = FALSE)", {
 })
 
 test_that("DataCon.IntelligentForecaster.Csv: pull", {
-  path <- withCorrectWorkingDir(
+  con <- withCorrectWorkingDir(
     file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv",
       file_small_1000)
   )
-  expect_true(file.exists(path))
-  inst <- DataCon.IntelligentForecaster.Csv$new(
-    con = path,
-    cached = Data$new()
-  )
+  expect_true(file.exists(con))
+
+  inst <- DataCon.IntelligentForecaster.Csv$factories$test(con = con)
   expect_is(res <- inst$pull(), "data.frame")
   expect_true(nrow(res) > 0)
   expect_true(nrow(inst$getCached()$getData()) > 0)
 })
 
 test_that("DataCon.IntelligentForecaster.Csv: pull: overwrite", {
-  path <- withCorrectWorkingDir(
+  con <- withCorrectWorkingDir(
     file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv",
       file_small_1000)
   )
-  expect_true(file.exists(path))
-  inst <- DataCon.IntelligentForecaster.Csv$new(
-    con = path,
-    cached = Data$new()
-  )
+  expect_true(file.exists(con))
+
+  inst <- DataCon.IntelligentForecaster.Csv$factories$test(con = con)
   expect_is(res <- inst$pull(), "data.frame")
   expect_warning(expect_is(res <- inst$pull(), "data.frame"),
     "DataCon.IntelligentForecaster.Csv: pull: cached data exists \\(no overwrite\\)"
@@ -108,20 +132,23 @@ test_that("DataCon.IntelligentForecaster.Csv: pull: overwrite", {
 # applyRFormat -----------------------------------------------------------
 
 test_that("DataCon.IntelligentForecaster.Csv: applyRFormat: empty", {
+  inst <- DataCon.IntelligentForecaster.Csv$factories$production()
+  expect_error(res <- inst$applyRFormat(), ".* no data available")
+})
+
+test_that("DataCon.IntelligentForecaster.Csv: applyRFormat: test", {
   inst <- DataCon.IntelligentForecaster.Csv$new()
-  expect_error(res <- inst$applyRFormat(), "no data available")
+  expect_error(res <- inst$applyRFormat(), "you called the interface")
 })
 
 test_that("DataCon.IntelligentForecaster.Csv: applyRFormat", {
-  path <- withCorrectWorkingDir(
+  con <- withCorrectWorkingDir(
     file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv",
       file_small_25)
   )
-  expect_true(file.exists(path))
-  inst <- DataCon.IntelligentForecaster.Csv$new(
-    con = path,
-    cached = Data$new()
-  )
+  expect_true(file.exists(con))
+
+  inst <- DataCon.IntelligentForecaster.Csv$factories$test(con = con)
   tmp <- inst$pull(format = FALSE)
   expect_is(res <- inst$applyRFormat(), "data.frame")
   expect_is(res <- inst$getCached()$applyRFormat(), "data.frame")
@@ -138,15 +165,13 @@ test_that("DataCon.IntelligentForecaster.Csv: applyExternalFormat", {
   # inst$cached
   expect_identical(res <- inst$applyExternalFormat(), data.frame())
 
-  path <- withCorrectWorkingDir(
+  con <- withCorrectWorkingDir(
     file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv",
       file_small_25)
   )
-  expect_true(file.exists(path))
-  inst <- DataCon.IntelligentForecaster.Csv$new(
-    con = path,
-    cached = Data$new()
-  )
+  expect_true(file.exists(con))
+
+  inst <- DataCon.IntelligentForecaster.Csv$factories$test(con = con)
   tmp <- inst$pull()
   tmp <- inst$applyRFormat()
   expect_is(res <- inst$applyExternalFormat(), "data.frame")
@@ -156,15 +181,13 @@ test_that("DataCon.IntelligentForecaster.Csv: applyExternalFormat", {
 # cached_active -----------------------------------------------------------
 
 test_that("DataCon.IntelligentForecaster.Csv: cached_active: get", {
-  path <- withCorrectWorkingDir(
+  con <- withCorrectWorkingDir(
     file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv",
       file_small_25)
   )
-  expect_true(file.exists(path))
-  inst <- DataCon.IntelligentForecaster.Csv$new(
-    con = path,
-    cached = Data$new()
-  )
+  expect_true(file.exists(con))
+
+  inst <- DataCon.IntelligentForecaster.Csv$factories$test(con = con)
   expect_is(res <- inst$cached_active, "data.frame")
   expect_true(nrow(res) > 0)
 })
@@ -182,15 +205,14 @@ test_that("DataCon.IntelligentForecaster.Csv: cached_active: set", {
 # Pull extended -----------------------------------------------------------
 
 test_that("DataCon.IntelligentForecaster.Csv: pull: extended", {
-  path <- withCorrectWorkingDir(
+  con <- withCorrectWorkingDir(
     file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv",
       file_small_25)
   )
-  expect_true(file.exists(path))
-  inst <- DataCon.IntelligentForecaster.Csv$new(
-    con = path,
-    cached = Data$new()
-  )
+  expect_true(file.exists(con))
+
+  inst <- DataCon.IntelligentForecaster.Csv$factories$test(con = con)
+
   expect_is(res <- inst$pull(extended = TRUE), "data.frame")
   # sapply(res, class)
   expect_true(nrow(res) > 0)
@@ -200,17 +222,14 @@ test_that("DataCon.IntelligentForecaster.Csv: pull: extended", {
 # Meta --------------------------------------------------------------------
 
 test_that("DataCon.IntelligentForecaster.Csv: meta: extended", {
-  path <- withCorrectWorkingDir(
+  con <- withCorrectWorkingDir(
     file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv",
       file_small_25)
   )
-  expect_true(file.exists(path))
+  expect_true(file.exists(con))
 
   # DataCon.IntelligentForecaster.Csv$debug("pull")
-  inst <- DataCon.IntelligentForecaster.Csv$new(
-    con = path,
-    cached = Data$new()
-  )
+  inst <- DataCon.IntelligentForecaster.Csv$factories$test(con = con)
 
   ## Default meta value //
   expect_true(inst$meta$applyRFormat$extended == FALSE)
@@ -233,17 +252,14 @@ test_that("DataCon.IntelligentForecaster.Csv: meta: extended", {
 })
 
 test_that("DataCon.IntelligentForecaster.Csv: meta: with_ids", {
-  path <- withCorrectWorkingDir(
+  con <- withCorrectWorkingDir(
     file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv",
       file_small_25)
   )
-  expect_true(file.exists(path))
+  expect_true(file.exists(con))
 
   # DataCon.IntelligentForecaster.Csv$debug("pull")
-  inst <- DataCon.IntelligentForecaster.Csv$new(
-    con = path,
-    cached = Data$new()
-  )
+  inst <- DataCon.IntelligentForecaster.Csv$factories$test(con = con)
 
   ## Default meta value //
   expect_true(inst$meta$applyRFormat$with_ids == FALSE)
@@ -268,22 +284,19 @@ test_that("DataCon.IntelligentForecaster.Csv: meta: with_ids", {
 context("DataCon.IntelligentForecaster.Csv: structure")
 
 test_that("DataCon.IntelligentForecaster.Csv: structure", {
-  path <- withCorrectWorkingDir(
+  con <- withCorrectWorkingDir(
     file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv",
       file_small_25)
   )
-  expect_true(file.exists(path))
-  inst <- DataCon.IntelligentForecaster.Csv$new(
-    con = path,
-    cached = Data$new()
-  )
+  expect_true(file.exists(con))
+  inst <- DataCon.IntelligentForecaster.Csv$factories$test(con = con)
   inst$pull()
   expect_identical(
-    inst$getCached()$getExternalStructure()$columns,
+    inst$getCached()$getExternalFormat()$getStructure()$names,
     c("ID", "Moment", "Value", "Comment", "Note")
   )
   expect_identical(
-    inst$getCached()$getRStructure()$columns,
+    inst$getCached()$getRFormat()$getStructure()$names,
     c("id", "date", "value", "comment", "note")
   )
 })
@@ -293,11 +306,11 @@ test_that("DataCon.IntelligentForecaster.Csv: structure", {
 context("DataCon.IntelligentForecaster.Csv: meta format")
 
 test_that("DataCon.IntelligentForecaster.Csv: meta format", {
-  path <- withCorrectWorkingDir(
+  con <- withCorrectWorkingDir(
     file.path(getwd(), "data/persistent/DataCon.IntelligentForecaster.Csv",
       file_small_25)
   )
-  expect_true(file.exists(path))
+  expect_true(file.exists(con))
 
   data_r <- data.frame(
     x_1 = seq(10, 20, 5),
@@ -312,7 +325,7 @@ test_that("DataCon.IntelligentForecaster.Csv: meta format", {
     stringsAsFactors = FALSE
   )
 
-  r_meta_format <- list(
+  r_format <- list(
     function(x, pattern = "\\d{4}-\\d{2}-\\d{2}") {
       tmp <- lapply(x, function(ii) {
         if (any(grepl(pattern, ii))) {
@@ -328,7 +341,7 @@ test_that("DataCon.IntelligentForecaster.Csv: meta format", {
       x
     }
   )
-  ext_meta_format <- list(
+  ext_format <- list(
     function(x, pattern = "\\d{4}-\\d{2}-\\d{2}") {
       tmp <- lapply(x, function(ii) {
         if (any(grepl(pattern, ii))) {
@@ -346,18 +359,18 @@ test_that("DataCon.IntelligentForecaster.Csv: meta format", {
   )
 
   inst <- DataCon.IntelligentForecaster.Csv$new(
-    con = path,
+    con = con,
     cached = Data$new(
-      r_meta_format = DataFormat$new(format = r_meta_format),
-      ext_meta_format = DataFormat$new(format = ext_meta_format)
+      r_format = DataFormat$new(format = r_format),
+      ext_format = DataFormat$new(format = ext_format)
     )
   )
   inst$getCached()$setData(data_ext)
-  res <- inst$getCached()$applyRMetaFormat()
+  res <- inst$getCached()$applyRFormat()
   expect_false(all(grepl("\\.", names(res))))
   expect_true(inherits(res$x_2, "POSIXct"))
 
-  res <- inst$getCached()$applyExternalMetaFormat()
+  res <- inst$getCached()$applyExternalFormat()
   expect_false(all(grepl("_", names(res))))
   expect_true(inherits(res$x.2, "character"))
 })

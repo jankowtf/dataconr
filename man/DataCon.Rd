@@ -3,8 +3,8 @@
 \docType{data}
 \name{DataCon}
 \alias{DataCon}
-\title{Generic class for inheritance for data connections}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009c20398> 
+\title{Superclass for inheritance for data connections}
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009bd1658> 
  - attr(*, "name")= chr "DataCon_generator"
 }}
 \usage{
@@ -29,7 +29,7 @@ Connection to a data source}
 
 
 \itemize{
- \item{See superclass} {
+ \item{See interface} {
    \code{\link[idata]{IDataCon}}
  }
 }

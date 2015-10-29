@@ -18,6 +18,12 @@
 #'  \item{setFormat} {
 #'    TODO
 #'  }
+#'  \item{getStructure} {
+#'    TODO
+#'  }
+#'  \item{setStructure} {
+#'    TODO
+#'  }
 #' }
 #'
 #' @section Public methods:
@@ -42,9 +48,18 @@ IDataFormat <- R6Class(
   classname = "IDataFormat",
   portable = TRUE,
   public = list(
-    ## Methods //
-    getFormat = function() {},
-    setFormat = function() {}
+    getFormat = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    setFormat = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    getStructure = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    setStructure = function(...) {
+      stopOnInterfaceCall(self)
+    }
   )
 )
 
@@ -67,16 +82,16 @@ IDataFormat <- R6Class(
 #'  \item{setData} {
 #'    TODO
 #'  }
-#'  \item{getRMetaFormat} {
+#'  \item{getRFormat} {
 #'    TODO
 #'  }
-#'  \item{setRMetaFormat} {
+#'  \item{setRFormat} {
 #'    TODO
 #'  }
-#'  \item{getExternalMetaFormat} {
+#'  \item{getExternalFormat} {
 #'    TODO
 #'  }
-#'  \item{setExternalMetaFormat} {
+#'  \item{setExternalFormat} {
 #'    TODO
 #'  }
 #'  \item{setRStructure} {
@@ -96,28 +111,22 @@ IDataFormat <- R6Class(
 #' @section Public methods:
 #'
 #' \itemize{
-#'  \item{applyRMetaFormat} {
-#'    TODO
-#'  }
-#'  \item{applyExternalMetaFormat} {
-#'    TODO
-#'  }
 #'  \item{applyRFormat} {
 #'    TODO
 #'  }
 #'  \item{applyExternalFormat} {
 #'    TODO
 #'  }
+#'  \item{applyInjectedRFormat} {
+#'    TODO
+#'  }
+#'  \item{applyInjectedExternalFormat} {
+#'    TODO
+#'  }
 #'  \item{cacheRStructure} {
 #'    TODO
 #'  }
 #'  \item{cacheExternalStructure} {
-#'    TODO
-#'  }
-#'  \item{applyRStructure} {
-#'    TODO
-#'  }
-#'  \item{applyExternalStructure} {
 #'    TODO
 #'  }
 #' }
@@ -139,26 +148,42 @@ IData <- R6Class(
   portable = TRUE,
   public = list(
     ## Methods //
-    getData = function() {},
-    setData = function() {},
-    getInjected = function() {},
-    setInjected = function() {},
-    getRMetaFormat = function() {},
-    setRMetaFormat = function() {},
-    getExternalMetaFormat = function() {},
-    setExternalMetaFormat = function() {},
-    getRStructure = function() {},
-    setRStructure = function() {},
-    getExternalStructure = function() {},
-    setExternalStructure = function() {},
-    applyRMetaFormat = function() {},
-    applyExternalMetaFormat = function() {},
-    applyRFormat = function() {},
-    applyExternalFormat = function() {},
-    cacheRStructure = function() {},
-    cacheExternalStructure = function() {},
-    applyRStructure = function() {},
-    applyExternalStructure = function() {}
+    getData = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    setData = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    getInjected = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    setInjected = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    getRFormat = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    setRFormat = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    getExternalFormat = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    setExternalFormat = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    applyRFormat = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    applyExternalFormat = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    applyInjectedRFormat = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    applyInjectedExternalFormat = function(...) {
+      stopOnInterfaceCall(self)
+    }
   )
 )
 
@@ -192,10 +217,10 @@ IData <- R6Class(
 #' @section Public methods:
 #'
 #' \itemize{
-#'  \item{toExternalData} {
+#'  \item{applyExternalFormat} {
 #'    TODO
 #'  }
-#'  \item{toRData} {
+#'  \item{applyRFormat} {
 #'    TODO
 #'  }
 #'  \item{pull} {
@@ -210,6 +235,8 @@ IData <- R6Class(
 #'
 #' \itemize{
 #'  \item{\code{\link[idata]{DataCon}}}
+#'  \item{\code{\link[idata]{DataCon.IntelligentForecaster}}}
+#'  \item{\code{\link[idata]{DataCon.IntelligentForecaster.Csv}}}
 #' }
 #'
 #' @template authors
@@ -222,14 +249,29 @@ IDataCon <- R6Class(
   classname = "IDataCon",
   portable = TRUE,
   public = list(
-    ## Methods //
-    getCached = function(...) {},
-    getCachedActive = function(...) {},
-    setCached = function(...) {},
-    setCachedActive = function(...) {},
-    toExternalData = function(...) {},
-    toRData = function(...) {},
-    pull = function(...) {},
-    push = function(...) {}
+    applyRFormat = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    applyExternalFormat = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    getCached = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    getCachedActive = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    setCached = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    setCachedActive = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    pull = function(...) {
+      stopOnInterfaceCall(self)
+    },
+    push = function(...) {
+      stopOnInterfaceCall(self)
+    }
   )
 )

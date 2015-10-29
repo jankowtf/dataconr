@@ -3,8 +3,8 @@
 \docType{data}
 \name{Data}
 \alias{Data}
-\title{Generic class for inheritance for unified data respresentations}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009c37cb8> 
+\title{Superclass for unified data respresentations}
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009be84e8> 
  - attr(*, "name")= chr "Data_generator"
 }}
 \usage{
@@ -22,11 +22,11 @@ TODO
 \item{\code{data}}{\code{\link{ANY}}
 Actual data}
 
-\item{\code{r_meta_format}}{\code{\link{IDataFormat}}
+\item{\code{r_format}}{\code{\link{IDataFormat}}
 Instance of a class that implements the \code{\link[idata]{IDataFormat}}
 interface and that contains meta format information for R.}
 
-\item{\code{ext_meta_format}}{\code{\link{IDataFormat}}
+\item{\code{ext_format}}{\code{\link{IDataFormat}}
 Instance of a class that implements the \code{\link[idata]{IDataFormat}}
 interface and that contains meta format information for external data
 location.}
@@ -72,7 +72,7 @@ data_ext <- data.frame(
 
 # Example meta format -----------------------------------------------------
 
-r_meta_format <- DataFormat$new(
+r_format <- DataFormat$new(
   format = list(
     function(x, pattern = "\\\\d{4}-\\\\d{2}-\\\\d{2}") {
       tmp <- lapply(x, function(ii) {
@@ -90,7 +90,7 @@ r_meta_format <- DataFormat$new(
     }
   )
 )
-ext_meta_format <- DataFormat$new(
+ext_format <- DataFormat$new(
   format = list(
     function(x, pattern = "\\\\d{4}-\\\\d{2}-\\\\d{2}") {
       tmp <- lapply(x, function(ii) {
@@ -111,9 +111,9 @@ ext_meta_format <- DataFormat$new(
 
 # Apply R format  ---------------------------------------------------------
 
-inst <- Data$new(data = data_ext, r_meta_format = r_meta_format)
+inst <- Data$new(data = data_ext, r_format = r_format)
 data_before <- inst$getData()
-inst$applyRMetaFormat()
+inst$applyRFormat()
 data_after <- inst$getData()
 
 ## Names comparison //
@@ -126,10 +126,10 @@ sapply(data_after, class)
 
 # Apply external format ---------------------------------------------------
 
-Data$undebug("applyExternalMetaFormat")
-inst <- Data$new(data = data_r, ext_meta_format = ext_meta_format)
+Data$undebug("applyExternalFormat")
+inst <- Data$new(data = data_r, ext_format = ext_format)
 data_before <- inst$getData()
-inst$applyExternalMetaFormat()
+inst$applyExternalFormat()
 data_after <- inst$getData()
 
 ## Names comparison //

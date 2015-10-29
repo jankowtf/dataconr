@@ -118,10 +118,16 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
           format = TRUE,
           overwrite = FALSE
         )
-      )
+      ),
+      factory
     ) {
       super$initialize(...)
       self$meta <- meta
+
+      ## Factory //
+      if (!missing(factory)) {
+        private$factory(factory)
+      }
     },
     applyExternalFormat = function(...) {
       ## TODO 2015-10-19: implement advanced csv writer
@@ -151,8 +157,11 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
 
         ## Cache //
         self$getCached()$setData(data)
-        self$getCached()$cacheExternalStructure()
-        # self$getCached()$getExternalStructure()
+
+        ## Set Structure //
+        self$getCached()$getExternalFormat()$setStructure(
+          self$getCached()$getData()
+        )
 
         ## Inject //
         self$getCached()$setInjected(self)
@@ -161,9 +170,13 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
         if (format) {
           # self$meta$applyRFormat$extended <- TRUE
   #         self$getCached()$getInjected()$meta$applyRFormat$extended
-          self$getCached()$applyRFormat(...)
-          self$getCached()$applyRMetaFormat()
-          self$getCached()$cacheRStructure()
+          self$getCached()$applyInjectedRFormat(...)
+          self$getCached()$applyRFormat()
+
+          ## Set Structure
+          self$getCached()$getRFormat()$setStructure(
+            self$getCached()$getData()
+          )
         }
       } else {
         warning(sprintf("%s: pull: cached data exists (no overwrite)",
@@ -174,7 +187,7 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
     push = function(
 
     ) {
-      stop("DataCon.IntelligentForecaster.Csv: push: not implemented yet ")
+      methodNotImplemented(self)
     }
   ),
   active = list(
@@ -190,8 +203,32 @@ DataCon.IntelligentForecaster.Csv <- R6Class(
       }
       self$getCached()$getData()
     }
+  ),
+  private = list(
+    factories = list(
+      production = function() {
+        DataCon.IntelligentForecaster.Csv$new(
+          cached = Data$new(
+            r_format = DataFormat$new(),
+            ext_format = DataFormat$new()
+          )
+        )
+      },
+      test = function(
+        con
+      ) {
+        DataCon.IntelligentForecaster.Csv$new(
+          con = con,
+          cached = Data$new(
+            r_format = DataFormat$new(),
+            ext_format = DataFormat$new()
+          )
+        )
+      }
+    )
   )
 )
+DataCon.IntelligentForecaster.Csv$factories <- DataCon.IntelligentForecaster.Csv$private_fields$factories
 
 # applyRFormat.DataCon.IntelligentForecaster.Csv ----------------------------------
 

@@ -4,7 +4,7 @@
 \name{IDataFormat}
 \alias{IDataFormat}
 \title{Class that functions as an interface for data format information}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009cebf18> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009ca9820> 
  - attr(*, "name")= chr "IDataFormat_generator"
 }}
 \usage{
@@ -27,6 +27,12 @@ rigid OOP contexts such as \emph{C#} or the like
    TODO
  }
  \item{setFormat} {
+   TODO
+ }
+ \item{getStructure} {
+   TODO
+ }
+ \item{setStructure} {
    TODO
  }
 }

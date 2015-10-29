@@ -2,7 +2,7 @@
 # DataFormat --------------------------------------------------------------
 
 #' @title
-#' Generic class for inheritance for data format information
+#' Superclass for data format information
 #'
 #' @description
 #' TODO
@@ -16,7 +16,7 @@
 #' @section Getters/setters:
 #'
 #' \itemize{
-#'  \item{See superclass} {
+#'  \item{See interface} {
 #'    \code{\link[idata]{IDataFormat}}
 #'  }
 #' }
@@ -42,18 +42,27 @@ DataFormat <- R6Class(
   public = list(
     ## Fields //
     format = list(),
+    struc = list(),
 
     ## Methods //
     initialize = function(
-      format = list()
+      format = list(),
+      struc = list()
     ) {
       self$format <- format
+      self$struc <- struc
     },
     getFormat = function() {
       self$format
     },
     setFormat = function(value) {
       self$format <- value
+    },
+    getStructure = function() {
+      self$struc
+    },
+    setStructure = function(value) {
+      self$struc <- getStructure(value)
     }
   )
 )
@@ -61,7 +70,7 @@ DataFormat <- R6Class(
 # Data ------------------------------------------------------------------
 
 #' @title
-#' Generic class for inheritance for unified data respresentations
+#' Superclass for unified data respresentations
 #'
 #' @description
 #' TODO
@@ -71,10 +80,10 @@ DataFormat <- R6Class(
 #'
 #' @field data \code{\link{ANY}}
 #'  Actual data
-#' @field r_meta_format \code{\link{IDataFormat}}
+#' @field r_format \code{\link{IDataFormat}}
 #'  Instance of a class that implements the \code{\link[idata]{IDataFormat}}
 #'  interface and that contains meta format information for R.
-#' @field ext_meta_format \code{\link{IDataFormat}}
+#' @field ext_format \code{\link{IDataFormat}}
 #'  Instance of a class that implements the \code{\link[idata]{IDataFormat}}
 #'  interface and that contains meta format information for external data
 #'  location.
@@ -110,28 +119,21 @@ Data <- R6Class(
   public = list(
     ## Fields //
     data = NULL,
-    injected = NULL,
-    r_meta_format = "IDataFormat",
-    ext_meta_format = "IDataFormat",
-
-    r_structure = list(),
-    ext_structure = list(),
+    injected = "IDataCon",
+    r_format = "IDataFormat",
+    ext_format = "IDataFormat",
 
     ## Methods //
     initialize = function(
       data = data.frame(),
-      injected = NULL,
-      r_meta_format = IDataFormat$new(),
-      ext_meta_format = IDataFormat$new(),
-      r_structure = list(),
-      ext_structure = list()
+      injected = IDataCon$new(),
+      r_format = IDataFormat$new(),
+      ext_format = IDataFormat$new()
     ) {
       self$data <- data
       self$injected <- injected
-      self$r_meta_format <- r_meta_format
-      self$ext_meta_format <- ext_meta_format
-      self$r_structure <- r_structure
-      self$ext_structure <- ext_structure
+      self$r_format <- r_format
+      self$ext_format <- ext_format
     },
     getData = function() {
       self$data
@@ -145,31 +147,58 @@ Data <- R6Class(
     setInjected = function(value) {
       self$injected <- value
     },
-    getRMetaFormat = function() {
-      self$r_meta_format
+    getRFormat = function() {
+      self$r_format
     },
-    setRMetaFormat = function(value) {
-      self$r_meta_format <- value
+    setRFormat = function(value) {
+      self$r_format <- value
     },
-    getExternalMetaFormat = function() {
-      self$ext_meta_format
+    getExternalFormat = function() {
+      self$ext_format
     },
-    setExternalMetaFormat = function(value) {
-      self$ext_meta_format <- value
-    },
-    getRStructure = function() {
-      self$r_structure
-    },
-    setRStructure = function(value) {
-      self$r_structure <- value
-    },
-    getExternalStructure = function() {
-      self$ext_structure
-    },
-    setExternalStructure = function(value) {
-      self$ext_structure <- value
+    setExternalFormat = function(value) {
+      self$ext_format <- value
     },
     applyRFormat = function(
+      ...
+    ) {
+      data <- self$getData()
+      ## Format //
+      format <- self$getRFormat()$getFormat()
+      if (length(format)) {
+        for (handler in format) {
+          data <- handler(data)
+        }
+      }
+      ## Structure //
+      struc <- self$getRFormat()$getStructure()
+      if (length(struc)) {
+        data <- applyStructure(struc, data = data, ...)
+      }
+      self$setData(data)
+      # self$getData()
+    },
+    applyExternalFormat = function(
+      ...
+    ) {
+      data <- self$getData()
+      ## Format //
+      format <- self$getExternalFormat()$getFormat()
+      if (length(format)) {
+        for (handler in format) {
+          data <- handler(data)
+        }
+        self$setData(data)
+      }
+      ## Structure //
+      struc <- self$getExternalFormat()$getStructure()
+      if (length(struc)) {
+        data <- applyStructure(struc, data = data, ...)
+      }
+      self$setData(data)
+      self$data
+    },
+    applyInjectedRFormat = function(
       injected = self$getInjected(),
       ...
     ) {
@@ -177,97 +206,40 @@ Data <- R6Class(
         injected$applyRFormat(...)
       }
     },
-    applyExternalFormat = function(
+    applyInjectedExternalFormat = function(
       injected = self$getInjected(),
       ...
     ) {
       if (!is.null(injected)) {
         injected$applyExternalFormat(...)
       }
-    },
-    applyRMetaFormat = function() {
-      data <- self$getData()
-      format <- self$getRMetaFormat()$getFormat()
-      if (length(format)) {
-        for (handler in format) {
-          data <- handler(data)
-        }
-        self$setData(data)
-      }
-      self$data
-    },
-    applyExternalMetaFormat = function() {
-      data <- self$getData()
-      format <- self$getExternalMetaFormat()$getFormat()
-      if (length(format)) {
-        for (handler in format) {
-          data <- handler(data)
-        }
-        self$setData(data)
-      }
-      self$data
-    },
-    cacheRStructure = function() {
-      struc <- list(
-        rows = rownames(self$data),
-        columns = names(self$data)
-      )
-      self$setRStructure(struc)
-      struc
-    },
-    cacheExternalStructure = function() {
-      struc <- list(
-        rows = rownames(self$data),
-        columns = names(self$data)
-      )
-      self$setExternalStructure(struc)
-      struc
-    },
-    applyRStructure = function(
-      scope = c("columns", "rows", "both")
-    ) {
-      scope <- match.arg(scope, c("columns", "rows", "both"))
-      struc <- self$getRStructure()
-      data <- self$getData()
-      if (scope == "columns" && !is.null(idx <- struc$columns)) {
-        data <- data[ , idx]
-      } else if (scope == "rows" && !is.null(idx <- struc$rows)) {
-        data <- data[idx , ]
-      } else if (
-          scope == "both" &&
-          !is.null(idx_r <- struc$rows) &&
-          !is.null(idx_c <- struc$columns)
-      ) {
-        data <- data[idx_r , idx_c]
-      }
-      self$setData(data)
-    },
-    applyExternalStructure = function(
-      scope = c("columns", "rows", "both")
-    ) {
-      scope <- match.arg(scope, c("columns", "rows", "both"))
-      struc <- self$getRStructure()
-      data <- self$getData()
-      if (scope == "columns" && !is.null(idx <- struc$columns)) {
-        data <- data[ , idx]
-      } else if (scope == "rows" && !is.null(idx <- struc$rows)) {
-        data <- data[idx , ]
-      } else if (
-        scope == "both" &&
-          !is.null(idx_r <- struc$rows) &&
-          !is.null(idx_c <- struc$columns)
-      ) {
-        data <- data[idx_r , idx_c]
-      }
-      self$setData(data)
     }
+#     applyExternalStructure = function(
+#       scope = c("columns", "rows", "both")
+#     ) {
+#       scope <- match.arg(scope, c("columns", "rows", "both"))
+#       struc <- self$getRStructure()
+#       data <- self$getData()
+#       if (scope == "columns" && !is.null(idx <- struc$columns)) {
+#         data <- data[ , idx]
+#       } else if (scope == "rows" && !is.null(idx <- struc$rows)) {
+#         data <- data[idx , ]
+#       } else if (
+#         scope == "both" &&
+#           !is.null(idx_r <- struc$rows) &&
+#           !is.null(idx_c <- struc$columns)
+#       ) {
+#         data <- data[idx_r , idx_c]
+#       }
+#       self$setData(data)
+#     }
   )
 )
 
 # DataCon ---------------------------------------------------------------
 
 #' @title
-#' Generic class for inheritance for data connections
+#' Superclass for inheritance for data connections
 #'
 #' @description
 #' TODO
@@ -283,7 +255,7 @@ Data <- R6Class(
 #' @section Getters/setters:
 #'
 #' \itemize{
-#'  \item{See superclass} {
+#'  \item{See interface} {
 #'    \code{\link[idata]{IDataCon}}
 #'  }
 #' }
@@ -323,6 +295,12 @@ DataCon <- R6Class(
       self$meta <- meta
       self$cached <- cached
     },
+    applyExternalFormat = function() {
+      methodNotImplemented(self)
+    },
+    applyRFormat = function(...) {
+      methodNotImplemented(self)
+    },
     getCached = function() {
       self$cached
     },
@@ -335,17 +313,11 @@ DataCon <- R6Class(
     setCachedActive = function(value) {
       self$cached_active <- value
     },
-    toExternalData = function() {
-      stop("DataCon: toExternalData: not implemented")
-    },
-    toRData = function(...) {
-      stop("DataCon: toRData: not implemented")
-    },
     pull = function(...) {
-      stop("DataCon: pull: not implemented")
+      methodNotImplemented(self)
     },
     push = function(...) {
-      stop("DataCon: push: not implemented")
+      methodNotImplemented(self)
     }
   )
 )

@@ -3,8 +3,8 @@
 \docType{data}
 \name{DataFormat}
 \alias{DataFormat}
-\title{Generic class for inheritance for data format information}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009c71e08> 
+\title{Superclass for data format information}
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009bfb8c8> 
  - attr(*, "name")= chr "DataFormat_generator"
 }}
 \usage{
@@ -26,7 +26,7 @@ TODO
 
 
 \itemize{
- \item{See superclass} {
+ \item{See interface} {
    \code{\link[idata]{IDataFormat}}
  }
 }

@@ -12,37 +12,19 @@ test_that("Data: instantiate: values", {
   format_dummy <- DataFormat$new()
   inst <- Data$new(
     data = data.frame(letters),
-    r_meta_format = format_dummy,
-    ext_meta_format = format_dummy
+    r_format = format_dummy,
+    ext_format = format_dummy
   )
   expect_identical(inst$data, data.frame(letters))
-  expect_identical(inst$r_meta_format, format_dummy)
-  expect_identical(inst$ext_meta_format, format_dummy)
+  expect_identical(inst$r_format, format_dummy)
+  expect_identical(inst$ext_format, format_dummy)
 })
 
-# Apply format -----------------------------------------------------------
+# Apply format -------------------------------------------------------
 
-context("Data: apply R format")
+context("Data: apply format")
 
-test_that("Data: apply R format", {
-  skip("Not implemented yet")
-  data <- data.frame(
-    x_1 = 10,
-    x_2 = as.POSIXlt("2015-01-01"),
-    x_3 = TRUE
-  )
-
-  Data$debug("applyRFormat")
-  inst <- Data$new(data = data, r_format = r_format)
-  inst$applyFormat(type = "r")
-})
-
-
-# Apply meta format -------------------------------------------------------
-
-context("Data: apply meta format")
-
-test_that("Data: apply meta format", {
+test_that("Data: apply format", {
   data_r <- data.frame(
     x_1 = seq(10, 20, 5),
     x_2 = seq(as.POSIXct("2015-01-01"), length.out = 3, by = "1 days"),
@@ -54,7 +36,7 @@ test_that("Data: apply meta format", {
     x.3 = TRUE
   )
 
-  r_meta_format <- DataFormat$new(
+  r_format <- DataFormat$new(
     format = list(
       function(x, pattern = "\\d{4}-\\d{2}-\\d{2}") {
         tmp <- lapply(x, function(ii) {
@@ -72,7 +54,7 @@ test_that("Data: apply meta format", {
       }
     )
   )
-  ext_meta_format <- DataFormat$new(
+  ext_format <- DataFormat$new(
     format = list(
       function(x, pattern = "\\d{4}-\\d{2}-\\d{2}") {
         tmp <- lapply(x, function(ii) {
@@ -90,87 +72,51 @@ test_that("Data: apply meta format", {
       }
     )
   )
-  #   Data$debug("applyRMetaFormat")
-  #   Data$undebug("applyRMetaFormat")
+  #   Data$debug("applyRFormat")
+  #   Data$undebug("applyRFormat")
 
   ## To R //
-  inst <- Data$new(data = data_ext, r_meta_format = r_meta_format)
-  expect_is(res <- inst$applyRMetaFormat(), "data.frame")
+  inst <- Data$new(data = data_ext, r_format = r_format)
+  expect_is(res <- inst$applyRFormat(), "data.frame")
   expect_true(nrow(res) > 0)
   expect_false(all(grepl("\\.", names(inst$data))))
   expect_true(inherits(inst$data$x_2, "POSIXct"))
 
+  inst <- Data$new(data = data_ext, r_format = r_format)
+  inst$getRFormat()$setStructure(inst$getData())
+  # inst$getRFormat()$getStructure()
+  res <- inst$applyRFormat()
+
   ## To external //
-  inst <- Data$new(data = data_r, ext_meta_format = ext_meta_format)
-  expect_is(res <- inst$applyExternalMetaFormat(), "data.frame")
+  inst <- Data$new(data = data_r, ext_format = ext_format)
+  expect_is(res <- inst$applyExternalFormat(), "data.frame")
   expect_true(nrow(res) > 0)
   expect_false(all(grepl("_", names(inst$data))))
   expect_true(inherits(inst$data$x.2, "character"))
+
+  inst <- Data$new(data = data_r, ext_format = ext_format)
+  inst$getExternalFormat()$setStructure(inst$getData())
+  # inst$getExternalFormat()$getStructure()
+  res <- inst$applyExternalFormat()
 })
 
-# Structure -------------------------------------------------------------------
+# Apply injected format ---------------------------------------------------
 
-context("Data: cache structure")
+context("Data: apply injected format")
 
-test_that("Data: cache order", {
-  data_r <- data.frame(
-    x_1 = seq(10, 20, 5),
-    x_2 = seq(as.POSIXct("2015-01-01"), length.out = 3, by = "1 days"),
-    x_3 = TRUE,
-    stringsAsFactors = FALSE
-  )
-# struc <- str(data_r)
-# structure(data_r)
-# eval(parse(text = deparse(data_r)))
+test_that("Data: apply injected format: R", {
+  skip("Not implemented yet")
 
-  ## R structure //
-  inst <- Data$new(data = data_r)
-  expect_identical(inst$r_structure, list())
-  expect_is(res <- inst$cacheRStructure(), "list")
-  expect_identical(inst$r_structure, list(
-    rows = c("1", "2", "3"),
-    columns = c("x_1", "x_2", "x_3")
-  ))
-
-  ## External structure //
-  inst <- Data$new(data = data_r)
-  expect_identical(inst$ext_structure, list())
-  expect_is(res <- inst$cacheExternalStructure(), "list")
-  expect_identical(inst$ext_structure, list(
-    rows = c("1", "2", "3"),
-    columns = c("x_1", "x_2", "x_3")
-  ))
-})
-
-context("Data: apply order")
-
-test_that("Data: apply order", {
-  data_r <- data.frame(
-    x_1 = seq(10, 20, 5),
-    x_2 = seq(as.POSIXct("2015-01-01"), length.out = 3, by = "1 days"),
+  data <- data.frame(
+    x_1 = 10,
+    x_2 = as.POSIXlt("2015-01-01"),
     x_3 = TRUE
   )
+  injected <- DataCon.IntelligentForecaster.Csv$new()
 
-  inst <- Data$new(data = data_r)
-  inst$cacheRStructure()
-  idx_r <- c("3", "1", "2")
-  idx_c <- c("x_3", "x_1", "x_2")
-
-  ## Scope = columns (default) //
-  inst$data <- inst$data[idx_r , idx_c]
-  expect_is(inst$applyRStructure(), "data.frame")
-  expect_identical(inst$getData(), data_r[idx_r, ])
-  inst$data <- inst$data[idx_r , idx_c]
-  expect_is(inst$applyRStructure("columns"), "data.frame")
-  expect_identical(inst$getData(), data_r[idx_r, ])
-
-  ## Scope = rows //
-  inst$data <- inst$data[idx_r , idx_c]
-  expect_is(inst$applyRStructure("rows"), "data.frame")
-  expect_identical(inst$getData(), data_r[, idx_c])
-
-  ## Scope = both //
-  inst$data <- inst$data[idx_r , idx_c]
-  expect_is(inst$applyRStructure("both"), "data.frame")
-  expect_identical(inst$getData(), data_r)
+  Data$debug("applyRFormat")
+  inst <- Data$new(data = data, injected = injected)
+  inst$getInjected()
+  inst$applyInjectedRFormat(type = "r")
 })
+

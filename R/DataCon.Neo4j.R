@@ -55,15 +55,39 @@ DataCon.Neo4j <- R6Class(
       applyRFormat(con = self, ...)
     },
     pull = function(...) {
-      stop("DataCon.Neo4j: pull: not implemented yet ")
+      methodNotImplemented(self)
     },
     push = function(
 
     ) {
-      stop("DataCon.Neo4j: push: not implemented yet ")
+      methodNotImplemented(self)
     }
+  ),
+  private = list(
+    factories = list(
+      production = function() {
+        DataCon.Neo4j$new(
+          cached = Data$new(
+            r_format = DataFormat$new(),
+            ext_format = DataFormat$new()
+          )
+        )
+      },
+      test = function(
+        con
+      ) {
+        DataCon.Neo4j$new(
+          con = con,
+          cached = Data$new(
+            r_format = DataFormat$new(),
+            ext_format = DataFormat$new()
+          )
+        )
+      }
+    )
   )
 )
+DataCon.Neo4j$factories <- DataCon.Neo4j$private_fields$factories
 
 # applyRFormat.DataCon.Neo4j -------------------------------------------------
 
@@ -113,7 +137,7 @@ applyRFormat.DataCon.Neo4j <- function(
   }
 
   ## Meta information //
-  if (length(idx <- con$getCached()$getRStructure())) {
+  if (length(idx <- con$getCached()$getRFormat()$getStructure())) {
     data_2 <- data_2[ , idx$columns]
   }
 
