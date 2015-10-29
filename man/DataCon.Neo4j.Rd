@@ -4,7 +4,7 @@
 \name{DataCon.Neo4j}
 \alias{DataCon.Neo4j}
 \title{Connector for Neo4j}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009b39a48> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009b383b8> 
  - attr(*, "name")= chr "DataCon.Neo4j_generator"
 }}
 \usage{

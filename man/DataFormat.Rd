@@ -4,7 +4,7 @@
 \name{DataFormat}
 \alias{DataFormat}
 \title{Superclass for data format information}
-\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009bdfc60> 
+\format{\preformatted{Class 'R6ClassGenerator' <environment: 0x0000000009bde5d0> 
  - attr(*, "name")= chr "DataFormat_generator"
 }}
 \usage{

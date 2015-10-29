@@ -44,7 +44,6 @@ test_that("DataFormat: instantiate: values: struc", {
   expect_identical(inst$struc, target)
 })
 
-
 # Getters -----------------------------------------------------------------
 
 context("DataFormat: getters/setters")
@@ -83,3 +82,20 @@ test_that("DataFormat: getters/setters", {
   expect_identical(inst$getStructure(), target)
 })
 
+# DataFormat: setStructure ------------------------------------------------
+
+context("DataFormat: setStructure")
+
+test_that("DataFormat: setStructure", {
+  data <- data.frame(a = letters[1:5], b = letters[1:5])
+  target <- getStructure(data)
+  inst <- DataFormat$new(struc = target)
+
+  expect_identical(inst$setStructure(data), target)
+  expect_identical(inst$getStructure(), target)
+
+  data_2 <- data.frame(x = letters[1:5], y = letters[1:5])
+  target <- getStructure(data_2)
+  expect_identical(inst$setStructure(target), target)
+  expect_identical(inst$getStructure(), target)
+})

@@ -62,7 +62,8 @@ DataFormat <- R6Class(
       self$struc
     },
     setStructure = function(value) {
-      self$struc <- getStructure(value)
+      # self$struc <- getStructure(value)
+      self$struc <- handleSetStructure(value)
     }
   )
 )
